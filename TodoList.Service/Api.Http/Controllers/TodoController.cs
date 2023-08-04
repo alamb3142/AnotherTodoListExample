@@ -7,6 +7,7 @@ using Application.Todos.UpdateTodo;
 using FluentResults;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
+using Application.TodoLists.RenameTodo;
 
 namespace Api.Http.Todos;
 
@@ -21,6 +22,24 @@ public class TodoController : ControllerBase
 		_mediator = mediator;
 	}
 
+	[HttpPost]
+	public async Task<ActionResult> RenameTodo(RenameTodoCommand command, CancellationToken cancellationToken)
+	{
+		var result = await _mediator.Send(command);
+
+		if (result.IsSuccess)
+		{
+			return Accepted();
+		}
+
+		if (result.HasError<NotFoundError>())
+		{
+			var error = result.Errors.First(x => x.GetType() == typeof(NotFoundError));
+			return NotFound(error.Message);
+		}
+
+		return Problem(statusCode: (int)HttpStatusCode.InternalServerError);
+	}
 
 	[HttpPost]
 	[ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
