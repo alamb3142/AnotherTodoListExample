@@ -42,6 +42,13 @@ public class TodoController : ControllerBase
 		return Accepted();
 	}
 
+	[HttpDelete]
+	public async Task<ActionResult> DeleteTodo(DeleteTodoCommand command, CancellationToken cancellationToken)
+	{
+		await _mediator.Send(command, cancellationToken);
+		return Accepted();
+	}
+
 	[Route("todos")]
 	[ProducesResponseType(typeof(GetAllTodosQueryResponse), (int)HttpStatusCode.OK)]
 	public async Task<ActionResult<GetAllTodosQueryResponse>> GetAll(GetAllTodosQuery query, CancellationToken cancellationToken)
