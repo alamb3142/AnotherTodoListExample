@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+option csharp_namespace = "Grpc.Todos";
+
+package todo_read;
+
+service Todo {
+	rpc GetAll (GetAllTodosRequest) returns (GetAllTodosResponse);
+	rpc GetFiltered (GetFilteredTodosRequest) returns (GetFilteredTodosResponse);
+
+	rpc Create (CreateTodoRequest) returns (CreateTodoResponse);
+	rpc Update (UpdateTodoRequest) returns (UpdateTodoResponse);
+	rpc Delete (DeleteTodosRequest) returns (DeleteTodosResponse);
+}
+
+// Queries
+
+message TodoDto {
+	int32 id = 1;
+	string title = 2;
+	bool completed = 3;
+}
+
+message GetAllTodosRequest {}
+message GetAllTodosResponse {
+	repeated TodoDto todos = 1;
+}
+
+message GetFilteredTodosRequest {
+	optional string searchTerm = 1;
+	optional int32 offset = 2;
+	optional int32 fetchNum = 3;
+}
+message GetFilteredTodosResponse {
+	repeated TodoDto todos = 1;
+}
+
+// Commands
+
+message CreateTodoRequest {
+	string title = 1;
+}
+message CreateTodoResponse {
+	int32 id = 1;
+}
+
+message UpdateTodoRequest {
+	int32 id = 1;
+	optional string title = 2;
+	optional bool completed = 3;
+}
+message UpdateTodoResponse { }
+
+message DeleteTodosRequest {
+	int32 id = 1;
+}
+message DeleteTodosResponse {}

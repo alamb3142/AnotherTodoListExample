@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build service",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                "${workspaceFolder}\\TodoList.Service\\TodoList.Service.sln",
+                "/property:GenerateFullPaths=true"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build service and angular clients",
+            "type": "shell",
+            "command": "npm run proto:generate:win",
+            "problemMatcher": "$tsc",
+            "dependsOn": [
+                "build service"
+            ],
+            "dependsOrder": "parallel",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/TodoList.UI/"
+            }
+        },
+        {
+            "label": "generate angular clients",
+            "type": "npm",
+            "script": "proto:generate:win",
+            "problemMatcher": "$tsc",
+            "options": {
+                "cwd": "${workspaceFolder}/TodoList.UI/"
+            }
+        }
+    ],
+}

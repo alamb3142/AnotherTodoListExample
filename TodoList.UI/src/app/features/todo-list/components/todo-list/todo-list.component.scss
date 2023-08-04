@@ -1,0 +1,64 @@
+.feature-container {
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+}
+
+.todo-container {
+	border: 2px black;
+	border-style: dashed;
+	flex-direction: column;
+	align-items: flex-start;
+	width: auto;
+	max-width: 60ch;
+	margin: auto;
+	line-height: 1.75;
+	font-size: 1.25em;
+}
+
+.todo-title {
+	font-weight: bold;
+	font-size: large;
+	padding: 1rem 0rem 0.2rem 0rem;
+	margin: 0;
+}
+
+.todo-list {
+	width: 100%;
+	margin: auto;
+	max-width: 30rem;
+	padding: 0;
+
+	border: 1px dashed black;
+	border-radius: 0.7rem;
+}
+
+.todo-item {
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem 0.3rem;
+	align-items: center;
+}
+
+label {
+	width: 100%;
+	text-align: left;
+}
+
+button {
+	display: block;
+	width: 60px;
+	height: 25px;
+	background-color: rgb(205, 186, 223);
+	color: black;
+	padding: 2px;
+	border-width: 1px;
+	border-style: outset;
+	border-radius: 5px;
+	flex: 0 0 auto;
+}
+
+.todo-input {
+	width: 80%;
+	height: 100%;
+}
