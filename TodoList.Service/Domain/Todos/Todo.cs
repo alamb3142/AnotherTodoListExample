@@ -1,6 +1,7 @@
 using Domain.Common;
 using Domain.Common.ValueObjects;
 using Domain.TodoLists;
+using FluentResults;
 
 namespace Domain.Todos;
 
@@ -10,8 +11,6 @@ public class Todo : Entity, IAggregateRoot
 	public Title Title { get; protected set; }
 	public bool Completed { get; protected set; }
 	public DateTime? DueUtc { get; protected set; }
-
-	private Todo() { }
 
 	private Todo(int id, Title title, bool completed, int? todoListId = null, DateTime? dueUtc = null) : this()
 	{
@@ -32,6 +31,18 @@ public class Todo : Entity, IAggregateRoot
 		Title = title;
 	}
 
+	public Result Rename(string title)
+	{
+		var titleResult = Title.Create(title);
+
+		if (titleResult.IsFailed)
+		{
+			return Result.Fail(titleResult.Errors);
+		}
+
+		return Result.Ok();
+	}
+
 	public void Complete()
 	{
 		Completed = true;
@@ -47,4 +58,8 @@ public class Todo : Entity, IAggregateRoot
 	{
 		TodoListId = null;
 	}
+
+#nullable disable
+	private Todo() { }
+#nullable enable
 }
