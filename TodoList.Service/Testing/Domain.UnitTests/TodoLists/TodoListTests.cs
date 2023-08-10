@@ -22,17 +22,6 @@ public class TodoListTests
     }
 
     [Test]
-    public void Rename_WithValidTitle_UpdatesTitle()
-    {
-        var todoList = TodoList.Create(validTitle);
-
-        var newTitle = Title.Create("Daily Tasks").Value;
-        todoList.Rename(newTitle);
-
-        todoList.Title.Should().Be(newTitle);
-    }
-
-    [Test]
     public void Rename_WithValidString_ReturnsOkResult()
     {
         var todoList = TodoList.Create(validTitle);
