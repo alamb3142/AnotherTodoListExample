@@ -1,4 +1,5 @@
 using Domain.Todos;
+using Domain.Common.Errors;
 using FluentResults;
 using Mediator;
 
@@ -19,13 +20,15 @@ public class RenameTodoCommandHandler : ICommandHandler<RenameTodoCommand, Resul
         this.repository = repository;
     }
 
-    public async ValueTask<Result> Handle(RenameTodoCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Result> Handle(
+        RenameTodoCommand command,
+        CancellationToken cancellationToken
+    )
     {
         var todoResult = await repository.GetByIdAsync(command.Id, cancellationToken);
 
         if (todoResult.IsFailed)
         {
-            // TODO move this into the domain & create the NotFoundError in the repo method
             return Result.Fail(new NotFoundError(command.Id, nameof(Todo)));
         }
 
@@ -35,9 +38,4 @@ public class RenameTodoCommandHandler : ICommandHandler<RenameTodoCommand, Resul
 
         return Result.Ok();
     }
-}
-
-public class NotFoundError : Error
-{
-    public NotFoundError(int id, string entityName) : base($"Couldn't find {entityName} with ID {id}") { }
 }
