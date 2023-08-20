@@ -1,41 +1,41 @@
 using Domain.Todos;
-using Domain.Common.Errors;
 using FluentResults;
 using Mediator;
 
-namespace Application.TodoLists.RenameTodo;
+namespace Application.Todos.RenameTodo;
 
 public class RenameTodoCommand : ICommand<Result>
 {
-    public required int Id { get; init; }
-    public required string Title { get; init; }
+	public required int Id { get; init; }
+	public required string Title { get; init; }
 }
 
 public class RenameTodoCommandHandler : ICommandHandler<RenameTodoCommand, Result>
 {
-    private readonly ITodoRepository repository;
+	private readonly ITodoRepository repository;
 
-    public RenameTodoCommandHandler(ITodoRepository repository)
-    {
-        this.repository = repository;
-    }
+	public RenameTodoCommandHandler(ITodoRepository repository)
+	{
+		this.repository = repository;
+	}
 
-    public async ValueTask<Result> Handle(
-        RenameTodoCommand command,
-        CancellationToken cancellationToken
-    )
-    {
-        var todoResult = await repository.GetByIdAsync(command.Id, cancellationToken);
+	public async ValueTask<Result> Handle(
+		RenameTodoCommand command,
+		CancellationToken cancellationToken
+	)
+	{
+		var todoResult = await repository.GetByIdAsync(command.Id, cancellationToken);
+		if (todoResult.IsFailed)
+			return todoResult.ToResult();
 
-        if (todoResult.IsFailed)
-        {
-            return Result.Fail(new NotFoundError(command.Id, nameof(Todo)));
-        }
+		var todo = todoResult.Value;
 
-        var todo = todoResult.Value;
+		var renameResult = todo.Rename(command.Title);
+		if (renameResult.IsFailed)
+			return renameResult;
 
-        var renameResult = todo.Rename(command.Title);
+		repository.Update(todo);
 
-        return Result.Ok();
-    }
+		return Result.Ok();
+	}
 }
