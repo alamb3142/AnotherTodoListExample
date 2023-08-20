@@ -7,12 +7,12 @@ using Mediator;
 
 namespace Application.Todos.CreateTodo;
 
-public class CreateTodoCommand : ICommand<Result<int>>
+public class CreateTodoCommand : ICommand<Result>
 {
     public required string Title { get; init; }
 }
 
-public class CreateTodoCommandHandler : ICommandHandler<CreateTodoCommand, Result<int>>
+public class CreateTodoCommandHandler : ICommandHandler<CreateTodoCommand, Result>
 {
     private readonly ITodoRepository repository;
 
@@ -21,18 +21,20 @@ public class CreateTodoCommandHandler : ICommandHandler<CreateTodoCommand, Resul
         repository = todoRepository;
     }
 
-    public async ValueTask<Result<int>> Handle(
+    public ValueTask<Result> Handle(
         CreateTodoCommand command,
         CancellationToken cancellationToken
     )
     {
-        Result<Title> titleOrError = Title.Create(command.Title);
-        if (titleOrError.IsFailed)
-            titleOrError.ToResult<int>();
+        Result<Title> titleResult = Title.Create(command.Title);
+        if (titleResult.IsFailed)
+			return ValueTask.FromResult(titleResult.ToResult());
 
-        var todo = Todo.Create(titleOrError.Value);
-        var id = await repository.CreateAsync(todo, cancellationToken);
-        return id;
+        var todo = Todo.Create(titleResult.Value);
+        repository.Create(todo);
+
+		var result = Result.Ok();
+		return new ValueTask<Result>(result);
     }
 }
 
