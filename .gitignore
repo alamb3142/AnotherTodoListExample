@@ -5,3 +5,5 @@
 **/node_modules
 **/.angular
 .vscode/settings.json
+TodoList.Service/Testing/Application.UnitTests/test-reports
+TodoList.Service/Testing/Application.UnitTests/coverage.xml
