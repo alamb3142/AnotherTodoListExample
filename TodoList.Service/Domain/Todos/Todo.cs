@@ -39,12 +39,10 @@ public class Todo : Entity, IAggregateRoot
     public Result Rename(string title)
     {
         var titleResult = Title.Create(title);
-
         if (titleResult.IsFailed)
-        {
             return Result.Fail(titleResult.Errors);
-        }
 
+		Title = titleResult.Value;
         return Result.Ok();
     }
 
