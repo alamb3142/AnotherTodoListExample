@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.TodoLists.ArchiveTodoList;
 using Application.TodoLists.Rename;
 
-namespace Api.Http.TodoLists;
+namespace Api.Http.Controllers;
 
 [Controller]
 [Route("TodoLists")]
@@ -41,10 +41,7 @@ public class TodoListController : ControllerBase
     {
         var result = await _mediator.Send(command, cancellationToken);
 
-        if (result.IsFailed)
-            return BadRequest(); // TODO: something better with error handling
-
-        return Ok(result.Value);
+        return this.FromResult(result);
     }
 
     [HttpPost]
@@ -54,8 +51,9 @@ public class TodoListController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        await _mediator.Send(command, cancellationToken);
-        return Ok();
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return this.FromResult(result);
     }
 
     [HttpPost]
@@ -67,9 +65,6 @@ public class TodoListController : ControllerBase
     {
         var result = await _mediator.Send(command, cancellationToken);
 
-        if (result.IsFailed)
-            return BadRequest();
-
-        return Ok();
+        return this.FromResult(result);
     }
 }

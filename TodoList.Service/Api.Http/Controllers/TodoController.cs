@@ -3,13 +3,13 @@ using Application.Todos.CreateTodo;
 using Application.Todos.GetAllTodos;
 using Application.Todos.GetFilteredTodos;
 using Application.Todos.DeleteTodo;
-using Domain.Common.Errors;
 using FluentResults;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using Application.TodoLists.RenameTodo;
+using Application.Todos.RenameTodo;
+using Application.Todos.CompleteTodo;
 
-namespace Api.Http.Todos;
+namespace Api.Http.Controllers;
 
 [Controller]
 [Route("Todos")]
@@ -30,20 +30,8 @@ public class TodoController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        var result = await _mediator.Send(command);
-
-        if (result.IsSuccess)
-        {
-            return Accepted();
-        }
-
-        if (result.HasError<NotFoundError>())
-        {
-            var error = result.Errors.First(x => x.GetType() == typeof(NotFoundError));
-            return NotFound(error.Message);
-        }
-
-        return Problem(statusCode: (int)HttpStatusCode.InternalServerError);
+        var result = await _mediator.Send(command, cancellationToken);
+        return this.FromResult(result);
     }
 
     [HttpPost]
@@ -55,31 +43,16 @@ public class TodoController : ControllerBase
     )
     {
         var response = await _mediator.Send(command, cancellationToken);
-
-        if (response.IsFailed)
-            return BadRequest(response.Errors);
-
-        return Ok(response.Value);
-    }
-
-    [HttpDelete]
-    public async Task<ActionResult> DeleteTodo(
-        DeleteTodoCommand command,
-        CancellationToken cancellationToken
-    )
-    {
-        await _mediator.Send(command, cancellationToken);
-        return Accepted();
+        return this.FromResult(response);
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(GetAllTodosQueryResponse), (int)HttpStatusCode.OK)]
     public async Task<ActionResult<GetAllTodosQueryResponse>> GetAll(
-        GetAllTodosQuery query,
         CancellationToken cancellationToken
     )
     {
-        var response = await _mediator.Send(query);
+        var response = await _mediator.Send(new GetAllTodosQuery());
         return Ok(response);
     }
 
@@ -93,5 +66,16 @@ public class TodoController : ControllerBase
     {
         var response = await _mediator.Send(query);
         return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("complete")]
+    public async Task<ActionResult> Complete(
+        CompleteTodoCommand command,
+        CancellationToken cancellationToken
+    )
+    {
+        var response = await _mediator.Send(command, cancellationToken);
+        return this.FromResult(response);
     }
 }
