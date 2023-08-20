@@ -31,8 +31,8 @@ public class TodoTests
 	{
 		var todo = Todo.Create(validTitle);
 
-		var newTitle = Title.Create("Walk the dog").Value;
-		todo.UpdateTitle(newTitle);
+		var newTitle = "Walk the dog";
+		todo.Rename(newTitle);
 
 		todo.Title.Should().Be(newTitle);
 	}
