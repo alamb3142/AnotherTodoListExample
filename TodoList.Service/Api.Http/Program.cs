@@ -1,32 +1,43 @@
 using Application;
-using Infrastructure;
 using Infrastructure.Common;
+using Infrastructure;
+using Mediator;
 
-var builder = WebApplication.CreateBuilder(args);
-var config = builder.Configuration;
-builder.Services.Configure<DbSettings>(config);
-var dbSettings = builder.Configuration.GetSection("DbSettings").Get<DbSettings>()!;
-
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(dbSettings);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+internal class Program
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
-	app.UseDeveloperExceptionPage();
+	private static void Main(string[] args)
+	{
+		var builder = WebApplication.CreateBuilder(args);
+
+		var dbSettings = new DbSettings()
+		{
+			DatabaseName = "TodoList",
+			Server = "localhost"
+		};
+
+		builder.Services.AddInfrastructure(dbSettings);
+		builder.Services.AddApplication();
+		builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+
+		builder.Services.AddControllers();
+		builder.Services.AddEndpointsApiExplorer();
+		builder.Services.AddSwaggerGen();
+
+		var app = builder.Build();
+
+		if (app.Environment.IsDevelopment())
+		{
+			app.UseSwagger();
+			app.UseSwaggerUI();
+			app.UseDeveloperExceptionPage();
+		}
+
+		app.UseHttpsRedirection();
+
+		app.UseAuthorization();
+
+		app.MapControllers();
+
+		app.Run();
+	}
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
