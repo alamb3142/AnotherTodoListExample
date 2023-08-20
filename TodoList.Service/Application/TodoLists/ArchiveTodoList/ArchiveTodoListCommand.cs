@@ -1,15 +1,16 @@
 using Mediator;
 using Domain.TodoLists;
 using FluentValidation;
+using FluentResults;
 
 namespace Application.TodoLists.ArchiveTodoList;
 
-public class ArchiveTodoListCommand : ICommand
+public class ArchiveTodoListCommand : ICommand<Result>
 {
     public int TodoListId { get; init; }
 }
 
-public class ArchiveTodoListCommandHandler : ICommandHandler<ArchiveTodoListCommand>
+public class ArchiveTodoListCommandHandler : ICommandHandler<ArchiveTodoListCommand, Result>
 {
     private readonly ITodoListRepository repository;
 
@@ -18,17 +19,21 @@ public class ArchiveTodoListCommandHandler : ICommandHandler<ArchiveTodoListComm
         this.repository = repository;
     }
 
-    public async ValueTask<Unit> Handle(
+    public async ValueTask<Result> Handle(
         ArchiveTodoListCommand command,
         CancellationToken cancellationToken
     )
     {
-        var todoList = await repository.GetByIdAsync(command.TodoListId, cancellationToken);
+        var todoListResult = await repository.GetByIdAsync(command.TodoListId, cancellationToken);
+        if (todoListResult.IsFailed)
+            return Result.Fail(todoListResult.Errors);
+
+        var todoList = todoListResult.Value;
 
         todoList.Archive();
 
         repository.Update(todoList);
-        return Unit.Value;
+        return Result.Ok();
     }
 }
 
