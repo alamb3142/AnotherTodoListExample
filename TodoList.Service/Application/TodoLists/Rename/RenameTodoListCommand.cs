@@ -21,8 +21,11 @@ public class RenameTodoListCommandHandler : ICommandHandler<RenameTodoListComman
 
     public async ValueTask<Result> Handle(RenameTodoListCommand command, CancellationToken cancellationToken)
     {
-        var todoList = await _repository.GetByIdAsync(command.Id, cancellationToken);
+        var todoListResult = await _repository.GetByIdAsync(command.Id, cancellationToken);
+        if (todoListResult.IsFailed)
+            return Result.Fail(todoListResult.Errors);
 
+        var todoList = todoListResult.Value;
         var renameResult = todoList.Rename(command.Name);
 
         if (renameResult.IsFailed)
