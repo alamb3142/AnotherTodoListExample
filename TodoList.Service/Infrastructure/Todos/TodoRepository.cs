@@ -18,10 +18,9 @@ public class TodoRepository : ITodoRepository, IDisposable
         _context = context;
     }
 
-    public async Task<int> CreateAsync(Todo todo, CancellationToken cancellationToken)
+    public void Create(Todo todo)
     {
-        await _context.Todos.AddAsync(todo, cancellationToken);
-        return todo.Id;
+        _context.Todos.Add(todo);
     }
 
     public Task<List<Todo>> GetAllAsync(CancellationToken cancellationToken)
