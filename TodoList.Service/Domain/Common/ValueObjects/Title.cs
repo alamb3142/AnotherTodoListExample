@@ -1,3 +1,4 @@
+using Domain.Common.Errors;
 using FluentResults;
 
 namespace Domain.Common.ValueObjects;
@@ -15,10 +16,12 @@ public class Title : ValueObject
     public static Result<Title> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value.Trim()))
-            return Result.Fail("Title cannot be empty");
+            return Result.Fail(new BusinessRuleError("Title cannot be empty"));
 
         if (value.Length > MAX_LENGTH)
-            return Result.Fail($"Title cannot be longer than {MAX_LENGTH} characters");
+            return Result.Fail(
+                new BusinessRuleError($"Title cannot be longer than {MAX_LENGTH} characters")
+            );
 
         return Result.Ok(new Title(value));
     }
