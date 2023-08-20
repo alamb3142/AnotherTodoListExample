@@ -51,9 +51,13 @@ public class TodoRepository : ITodoRepository, IDisposable
         return Result.Ok(todo);
     }
 
-    public void Dispose()
-    {
-        // TODO: Move save logic into a pipeline behaviour
-        // this._context.SaveChanges();
-    }
+	public void Update(Todo todo)
+	{
+		_context.Todos.Update(todo);
+	}
+
+	public void Dispose()
+	{
+		_context.SaveChanges();
+	}
 }

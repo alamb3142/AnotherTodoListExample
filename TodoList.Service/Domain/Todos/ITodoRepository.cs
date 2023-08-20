@@ -12,4 +12,5 @@ public interface ITodoRepository : IRepository<Todo>
 	public Task<int> CreateAsync(Todo todo, CancellationToken cancellationToken);
 
 	public Task<Result> DeleteAsync(int todoId, CancellationToken cancellationToken);
+	public void Update(Todo todo);
 }
