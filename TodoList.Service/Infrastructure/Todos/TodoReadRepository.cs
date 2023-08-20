@@ -18,7 +18,7 @@ public class TodoReadRepository : ITodoReadRepository
     {
         var query =
             @"
-			SELECT *
+			SELECT Id, Title = Title_Value, Completed
 			FROM Todos
 		";
 
@@ -41,7 +41,10 @@ public class TodoReadRepository : ITodoReadRepository
 
         var sql =
             @"
-			SELECT *
+			SELECT
+				Id,
+				Title = Title_Value,
+				Completed
 			FROM Todos"
             + filter
 			+ " OFFSET @Offset ROWS"
