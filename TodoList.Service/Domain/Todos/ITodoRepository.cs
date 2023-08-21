@@ -5,11 +5,9 @@ namespace Domain.Todos;
 
 public interface ITodoRepository : IRepository<Todo>
 {
-	public Task<List<Todo>> GetAllAsync(CancellationToken cancellationToken);
-
-	public Task<Result<Todo>> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-
-	public Task<int> CreateAsync(Todo todo, CancellationToken cancellationToken);
-
-	public Task<Result> DeleteAsync(int todoId, CancellationToken cancellationToken);
+    public Task<List<Todo>> GetAllAsync(CancellationToken cancellationToken = default);
+    public Task<Result<Todo>> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    public Task<Result> DeleteAsync(int todoId, CancellationToken cancellationToken = default);
+	public void Create(Todo todo);
+    public void Update(Todo todo);
 }

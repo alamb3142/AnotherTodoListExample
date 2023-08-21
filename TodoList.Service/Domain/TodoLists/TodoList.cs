@@ -7,10 +7,9 @@ namespace Domain.TodoLists;
 
 public class TodoList : Entity, IAggregateRoot
 {
-	private readonly List<int> _todoIds;
-
 	public Title Title { get; protected set; }
 	public bool Archived { get; protected set; } = false;
+	private readonly List<int> _todoIds;
 	public IReadOnlyCollection<int> TodoIds => _todoIds.AsReadOnly();
 
 	protected TodoList(int id, Title title, List<int> todoIds)
@@ -25,16 +24,11 @@ public class TodoList : Entity, IAggregateRoot
 		return new TodoList(default, title, new List<int>());
 	}
 
-	public void Rename(Title title)
-	{
-		Title = title;
-	}
-
 	public Result Rename(string title)
 	{
 		var newTitle = Title.Create(title);
 		if (newTitle.IsFailed)
-			return newTitle.ToResult();
+			return Result.Fail(newTitle.Errors);
 
 		Title = newTitle.Value;
 		return Result.Ok();
