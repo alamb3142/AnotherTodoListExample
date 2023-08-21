@@ -7,39 +7,33 @@ namespace Application.Todos.CompleteTodo;
 
 public class CompleteTodoCommand : ICommand<Result>
 {
-    public required int Id { get; init; }
+	public required int Id { get; init; }
 }
 
 public class CompleteTodoCommandHandler : ICommandHandler<CompleteTodoCommand, Result>
 {
-    private readonly ITodoRepository repository;
+	private readonly ITodoRepository repository;
 
-    public CompleteTodoCommandHandler(ITodoRepository repository)
-    {
-        this.repository = repository;
-    }
+	public CompleteTodoCommandHandler(ITodoRepository repository)
+	{
+		this.repository = repository;
+	}
 
-    public async ValueTask<Result> Handle(
-        CompleteTodoCommand command,
-        CancellationToken cancellationToken
-    )
-    {
-        var todoResult = await repository.GetByIdAsync(command.Id, cancellationToken);
-        if (todoResult.IsFailed)
-            return Result.Fail(todoResult.Errors);
+	public async ValueTask<Result> Handle(
+		CompleteTodoCommand command,
+		CancellationToken cancellationToken
+	)
+	{
+		var todoResult = await repository.GetByIdAsync(command.Id, cancellationToken);
+		if (todoResult.IsFailed)
+			return todoResult.ToResult();
 
-        var todo = todoResult.Value;
+		var todo = todoResult.Value;
 
-        todo.Complete();
+		todo.Complete();
 
-        return Result.Ok();
-    }
-}
+		repository.Update(todo);
 
-public class CompleteTodoCommandValidator : AbstractValidator<CompleteTodoCommand>
-{
-    public CompleteTodoCommandValidator()
-    {
-        RuleFor(x => x.Id).NotEmpty();
-    }
+		return Result.Ok();
+	}
 }
