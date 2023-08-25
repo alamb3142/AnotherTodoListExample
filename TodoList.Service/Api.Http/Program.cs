@@ -20,15 +20,28 @@ internal class Program
 		builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 
 		builder.Services.AddControllers();
-		builder.Services.AddEndpointsApiExplorer();
-		builder.Services.AddSwaggerGen();
+		// builder.Services.AddEndpointsApiExplorer();
+		// builder.Services.AddSwaggerGen();
+		builder.Services.AddOpenApiDocument();
 
 		var app = builder.Build();
 
 		if (app.Environment.IsDevelopment())
 		{
-			app.UseSwagger();
-			app.UseSwaggerUI();
+			// app.UseSwagger();
+			// app.UseSwaggerUI();
+
+			app.UseOpenApi(options =>
+			{
+				options.DocumentName = "Goodbye world";
+			});
+			app.UseSwaggerUi3(options =>
+			{
+				options.DefaultModelsExpandDepth = 4;
+				options.DocExpansion = "list";
+				options.DocumentTitle = "Todos";
+			});
+
 			app.UseDeveloperExceptionPage();
 		}
 
