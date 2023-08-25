@@ -2,7 +2,6 @@ using System.Net;
 using Application.Todos.CreateTodo;
 using Application.Todos.GetAllTodos;
 using Application.Todos.GetFilteredTodos;
-using FluentResults;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Application.Todos.RenameTodo;
@@ -32,19 +31,19 @@ public class TodoController : ControllerBase
 		CancellationToken cancellationToken
 	)
 	{
-		var result = await _mediator.Send(command, cancellationToken);
+		Result result = await _mediator.Send(command, cancellationToken);
 		return this.FromResult(result);
 	}
 
 	[HttpPost]
-	[ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+	[ProducesResponseType((int)HttpStatusCode.OK)]
 	[ProducesErrorResponseType(typeof(List<IError>))]
 	public async Task<ActionResult<int>> CreateTodo(
 		CreateTodoCommand command,
 		CancellationToken cancellationToken
 	)
 	{
-		var response = await _mediator.Send(command, cancellationToken);
+		Result response = await _mediator.Send(command, cancellationToken);
 		return this.FromResult(response);
 	}
 
@@ -54,7 +53,7 @@ public class TodoController : ControllerBase
 		CancellationToken cancellationToken
 	)
 	{
-		var response = await _mediator.Send(new GetAllTodosQuery());
+		GetAllTodosQueryResponse response = await _mediator.Send(new GetAllTodosQuery());
 		return Ok(response);
 	}
 
@@ -66,40 +65,43 @@ public class TodoController : ControllerBase
 		CancellationToken cancellationToken
 	)
 	{
-		var response = await _mediator.Send(query);
+		GetFilteredTodosQueryResponse response = await _mediator.Send(query);
 		return Ok(response);
 	}
 
 	[HttpPost]
 	[Route("complete")]
+	[ProducesResponseType((int)HttpStatusCode.Accepted)]
 	public async Task<ActionResult> Complete(
 		CompleteTodoCommand command,
 		CancellationToken cancellationToken
 	)
 	{
-		var response = await _mediator.Send(command, cancellationToken);
+		Result response = await _mediator.Send(command, cancellationToken);
 		return this.FromResult(response);
 	}
 
 	[HttpPost]
 	[Route("addToList")]
+	[ProducesResponseType((int)HttpStatusCode.Accepted)]
 	public async Task<ActionResult> AddToList(
 		AddToListCommand command,
 		CancellationToken cancellationToken
 	)
 	{
-		var response = await _mediator.Send(command, cancellationToken);
+		Result response = await _mediator.Send(command, cancellationToken);
 		return this.FromResult(response);
 	}
 
 	[HttpGet]
 	[Route("forList")]
+	[ProducesResponseType(typeof(IEnumerable<TodoDto>), (int)HttpStatusCode.OK)]
 	public async Task<ActionResult<IEnumerable<TodoDto>>> GetForList(
 		GetForListQuery query,
 		CancellationToken cancellationToken
 	)
 	{
-		var response = await _mediator.Send(query, cancellationToken);
+		IEnumerable<TodoDto> response = await _mediator.Send(query, cancellationToken);
 		return Ok(response);
 	}
 }
