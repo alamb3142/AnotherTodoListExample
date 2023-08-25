@@ -1,6 +1,5 @@
 using Domain.Todos;
 using FluentResults;
-using FluentValidation;
 using Mediator;
 
 namespace Application.Todos.CompleteTodo;
