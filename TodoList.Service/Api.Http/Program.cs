@@ -9,11 +9,21 @@ internal class Program
 	{
 		var builder = WebApplication.CreateBuilder(args);
 
-		var dbSettings = new DbSettings()
-		{
-			DatabaseName = "TodoList",
-			Server = "localhost"
-		};
+		var dbSettings = new DbSettings() { DatabaseName = "TodoList", Server = "localhost" };
+
+		builder.Services.AddCors(
+			options =>
+				options.AddPolicy(
+					"AllowAll",
+					policy =>
+					{
+						policy
+							.AllowAnyOrigin()
+							.AllowAnyMethod()
+							.AllowAnyHeader();
+					}
+				)
+		);
 
 		builder.Services.AddInfrastructure(dbSettings);
 		builder.Services.AddApplication();
@@ -46,10 +56,9 @@ internal class Program
 		}
 
 		app.UseHttpsRedirection();
-
 		app.UseAuthorization();
-
 		app.MapControllers();
+		app.UseCors("AllowAll");
 
 		app.Run();
 	}
