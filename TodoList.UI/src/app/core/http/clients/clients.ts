@@ -638,7 +638,7 @@ export class TodoListClient {
 }
 
 export class GetAllTodosQueryResponse implements IGetAllTodosQueryResponse {
-    todos?: TodoDto[];
+    todos!: TodoDto[];
 
     constructor(data?: IGetAllTodosQueryResponse) {
         if (data) {
@@ -678,13 +678,13 @@ export class GetAllTodosQueryResponse implements IGetAllTodosQueryResponse {
 }
 
 export interface IGetAllTodosQueryResponse {
-    todos?: TodoDto[];
+    todos: TodoDto[];
 }
 
 export class TodoDto implements ITodoDto {
-    id?: number;
-    title?: string;
-    completed?: boolean;
+    id!: number;
+    title!: string;
+    completed!: boolean;
 
     constructor(data?: ITodoDto) {
         if (data) {
@@ -720,13 +720,13 @@ export class TodoDto implements ITodoDto {
 }
 
 export interface ITodoDto {
-    id?: number;
-    title?: string;
-    completed?: boolean;
+    id: number;
+    title: string;
+    completed: boolean;
 }
 
 export class GetFilteredTodosQueryResponse implements IGetFilteredTodosQueryResponse {
-    todos?: TodoDto[];
+    todos!: TodoDto[];
 
     constructor(data?: IGetFilteredTodosQueryResponse) {
         if (data) {
@@ -766,13 +766,13 @@ export class GetFilteredTodosQueryResponse implements IGetFilteredTodosQueryResp
 }
 
 export interface IGetFilteredTodosQueryResponse {
-    todos?: TodoDto[];
+    todos: TodoDto[];
 }
 
 export class TodoListSummaryDto implements ITodoListSummaryDto {
-    id?: number;
-    title?: string;
-    todoCount?: number;
+    id!: number;
+    title!: string;
+    todoCount!: number;
 
     constructor(data?: ITodoListSummaryDto) {
         if (data) {
@@ -808,9 +808,9 @@ export class TodoListSummaryDto implements ITodoListSummaryDto {
 }
 
 export interface ITodoListSummaryDto {
-    id?: number;
-    title?: string;
-    todoCount?: number;
+    id: number;
+    title: string;
+    todoCount: number;
 }
 
 export class GetAllTodoListsQuery implements IGetAllTodoListsQuery {
