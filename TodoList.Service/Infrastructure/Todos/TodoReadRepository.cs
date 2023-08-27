@@ -36,19 +36,19 @@ public class TodoReadRepository : ITodoReadRepository
 	)
 	{
 		var filter = string.IsNullOrWhiteSpace(searchTerm)
-			? " WHERE Title LIKE '%' + @SearchTerm + '%'"
-			: "";
+			? ""
+			: " WHERE Title LIKE '%' + @SearchTerm + '%'";
 
-		var sql =
-			@"
-			SELECT
-				Id,
-				Title = Title_Value,
-				Completed
-			FROM Todos"
-			+ filter
-			+ " OFFSET @Offset ROWS"
-			+ " FETCH FIRST @FetchNum;";
+		var sql = @"
+SELECT
+	Id,
+	Title = Title_Value,
+	Completed
+FROM Todos
+ORDER BY Id"
++ filter
++ " OFFSET @Offset ROWS"
++ " FETCH FIRST @FetchNum ROWS ONLY;";
 
 		var parameters = new DynamicParameters();
 		parameters.Add("SearchTerm", searchTerm);
