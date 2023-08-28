@@ -8,3 +8,4 @@
 TodoList.Service/Testing/Application.UnitTests/test-reports
 TodoList.Service/Testing/Application.UnitTests/coverage.xml
 TodoList.Service/Testing/Application.UnitTests/report
+TodoList.UI/dist/todo-list.ui
