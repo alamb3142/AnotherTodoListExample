@@ -9,8 +9,8 @@ import {
 	switchMap,
 	tap
 } from 'rxjs';
-import { TodoDto } from 'src/app/core/api/clients/todo-read.pb';
-import { TodoDataService } from 'src/app/core/api/todo-data.service';
+import { TodoDto } from 'src/app/core/http/clients/clients';
+import { TodoService } from 'src/app/core/http/todo.service';
 
 @Component({
 	selector: 'app-todo-list',
@@ -25,7 +25,7 @@ export class TodoListComponent {
 	private refreshRequested$ = new BehaviorSubject<void>(undefined);
 
 	constructor(
-		private readonly todoService: TodoDataService,
+		private readonly todoService: TodoService,
 		private readonly fb: NonNullableFormBuilder
 	) {
 		const searchTodos$ = this.searchTodos.valueChanges.pipe(
@@ -37,15 +37,15 @@ export class TodoListComponent {
 			searchTodos$,
 			this.refreshRequested$.pipe(startWith(undefined))
 		]).pipe(
-			switchMap(([searchTerm]) => {
-				return this.todoService.get(searchTerm);
+			switchMap(([searchTerm, _]) => {
+				return this.todoService.getFiltered(searchTerm);
 			})
 		);
 	}
 
 	addTodo() {
 		this.todoService
-			.add(this.newTodo.value)
+			.create(this.newTodo.value)
 			.pipe(
 				tap(() => {
 					this.newTodo.reset();
@@ -57,23 +57,12 @@ export class TodoListComponent {
 
 	toggleTodo(todo: TodoDto) {
 		todo.completed = !todo.completed;
-		this.todoService
-			.update(todo.id, todo.description, todo.completed)
-			.subscribe(() => {
-				this.refreshRequested$.next();
-			});
+		this.todoService.complete(todo.id!).subscribe(() => {
+			this.refreshRequested$.next();
+		});
 	}
 
-	deleteTodo(todo: TodoDto) {
-		this.todoService
-			.delete(todo.id)
-			.pipe(
-				tap(() => {
-					this.refreshRequested$.next();
-				})
-			)
-			.subscribe();
-	}
+	deleteTodo(todo: TodoDto) {}
 
 	handleKeyPress(event: KeyboardEvent) {
 		if (event.key == 'Enter') {
@@ -82,6 +71,6 @@ export class TodoListComponent {
 	}
 
 	getTodoId(index: number, todo: TodoDto): number {
-		return todo.id;
+		return todo.id!;
 	}
 }
