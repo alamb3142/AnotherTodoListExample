@@ -6,9 +6,8 @@ import { AppComponent } from './app.component';
 import { GrpcCoreModule } from '@ngx-grpc/core';
 import { GrpcWebClientModule } from '@ngx-grpc/grpc-web-client';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HTTP_API_BASE_URL } from './core/http/clients/clients';
+import { HTTP_API_BASE_URL } from './core/api/http/clients/clients';
 import { HttpClientModule } from '@angular/common/http';
-import { PageSelectorService } from './features/nav-bar/services/page-selector.service';
 
 @NgModule({
 	declarations: [AppComponent],

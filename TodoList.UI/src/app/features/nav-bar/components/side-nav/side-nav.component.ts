@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { Observable, shareReplay } from 'rxjs';
-import { TodoListSummaryDto } from 'src/app/core/http/clients/clients';
-import { TodoListService } from 'src/app/core/http/todo-list.service';
 import {
 	faHouse,
 	faCalendar,
@@ -10,6 +8,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { PageSelectorService } from '../../services/page-selector.service';
 import { Pages } from 'src/app/core/enums/pages';
+import { TodoListService } from 'src/app/core/api/http/todo-list.service';
+import { TodoListSummaryDto } from 'src/app/core/api/http/clients/clients';
 
 @Component({
 	selector: 'app-side-nav',

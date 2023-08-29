@@ -9,8 +9,8 @@ import {
 	switchMap,
 	tap
 } from 'rxjs';
-import { TodoDto } from 'src/app/core/http/clients/clients';
-import { TodoService } from 'src/app/core/http/todo.service';
+import { TodoDto } from 'src/app/core/api/http/clients/clients';
+import { TodoService } from 'src/app/core/api/http/todo.service';
 
 @Component({
 	selector: 'app-todo-list',
