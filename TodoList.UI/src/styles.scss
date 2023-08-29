@@ -1,5 +1,46 @@
-/* You can add global styles to this file, and also import other style files */
+.feature-container {
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+}
+
+html,
 body {
-	padding: 0;
 	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow: hidden;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.theme-light {
+    --color-primary: #ffffff;
+    --color-secondary: #b8b8c5;
+    --color-accent: #b9d4d6;
+    --font-color: #000000;
+}
+
+.theme-dark {
+    --color-primary: #161616;
+    --color-secondary: #230202;
+    --color-accent: #481a1a;
+    --font-color: #ffffff;
+}
+
+.theme-dark2 {
+	--color-primary: #272838;
+	--font-color: #fcf7f8; 
+	--color-secondary: #4D7EA8;
+	--color-accent: #A2708A;
+	--color-shadow: #212230;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: var(--color-primary);
+    color: var(--font-color);
 }
