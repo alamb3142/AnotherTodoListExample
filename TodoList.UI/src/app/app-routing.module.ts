@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { Pages } from './core/enums/pages';
 
 const routes: Routes = [
 	{
@@ -8,9 +9,14 @@ const routes: Routes = [
 		pathMatch: 'full'
 	},
 	{
-		path: 'home',
+		path: Pages.home,
 		loadChildren: () =>
 			import('./pages/home-page/home-page.module').then(m => m.HomePageModule)
+	},
+	{
+		path: Pages.lists,
+		loadChildren: () => 
+			import('./pages/lists-page/lists-page.module').then(m => m.ListsPageModule)
 	}
 ];
 
