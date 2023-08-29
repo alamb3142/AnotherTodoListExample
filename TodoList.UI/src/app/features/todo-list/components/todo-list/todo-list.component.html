@@ -1,22 +1,15 @@
-<!-- 100% height & width, flexbox, 
-			designed to be sized by the page component
-			inside of container should be responsive
-			todo: global style 
--->
 <div class="feature-container">
 	<div class="todo-container">
 		<div class="todo-list">
 			<div class="todo-title todo-item">TODO:</div>
-			<div class="todo-item">
-				<input
-					type="text"
-					[formControl]="searchTodos"
-					class="todo-input"
-				/>
-			</div>
-			<div *ngFor="let todo of todos$ | async; let i = index; trackBy: getTodoId"	class="todo-item">
-				<app-todo-card [todo]="todo"></app-todo-card>
-			</div>
+			<!-- <div class="todo-item"> -->
+			<!-- 	<input -->
+			<!-- 		type="text" -->
+			<!-- 		[formControl]="searchTodos" -->
+			<!-- 		class="todo-input" -->
+			<!-- 	/> -->
+			<!-- </div> -->
+			<app-todo-card *ngFor="let todo of todos$ | async" [todo]="todo" class="todo-item"></app-todo-card>
 			<div class="todo-item">
 				<input type="text" [formControl]="newTodo" (keypress)="handleKeyPress($event)" class="todo-input"/>
 				<button (click)="addTodo()">Add</button>

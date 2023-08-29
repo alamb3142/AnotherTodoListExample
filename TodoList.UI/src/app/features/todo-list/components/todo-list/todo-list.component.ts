@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, NonNullableFormBuilder } from '@angular/forms';
 import {
 	BehaviorSubject,
@@ -18,8 +18,10 @@ import { TodoService } from 'src/app/core/api/http/todo.service';
 	styleUrls: ['./todo-list.component.scss']
 })
 export class TodoListComponent {
+	@Input() public todoListId?: number;
+
 	newTodo: FormControl<string> = this.fb.control('');
-	searchTodos: FormControl<string> = this.fb.control('');
+	// searchTodos: FormControl<string> = this.fb.control('');
 	todos$: Observable<TodoDto[]>;
 
 	private refreshRequested$ = new BehaviorSubject<void>(undefined);
@@ -28,17 +30,16 @@ export class TodoListComponent {
 		private readonly todoService: TodoService,
 		private readonly fb: NonNullableFormBuilder
 	) {
-		const searchTodos$ = this.searchTodos.valueChanges.pipe(
-			debounceTime(300),
-			startWith('')
-		);
-
-		this.todos$ = combineLatest([
-			searchTodos$,
-			this.refreshRequested$.pipe(startWith(undefined))
-		]).pipe(
-			switchMap(([searchTerm, _]) => {
-				return this.todoService.getFiltered(searchTerm);
+		// const searchTodos$ = this.searchTodos.valueChanges.pipe(
+		// 	debounceTime(300),
+		// 	startWith('')
+		// );
+		this.todos$ = this.refreshRequested$.pipe(
+			startWith(undefined),
+			switchMap(() => {
+				return !!this.todoListId
+					? this.todoService.getForList(this.todoListId)
+					: this.todoService.getAll();
 			})
 		);
 	}
@@ -55,22 +56,16 @@ export class TodoListComponent {
 			.subscribe();
 	}
 
-	toggleTodo(todo: TodoDto) {
+	completeTodo(todo: TodoDto) {
 		todo.completed = !todo.completed;
 		this.todoService.complete(todo.id!).subscribe(() => {
 			this.refreshRequested$.next();
 		});
 	}
 
-	deleteTodo(todo: TodoDto) {}
-
 	handleKeyPress(event: KeyboardEvent) {
 		if (event.key == 'Enter') {
 			this.addTodo();
 		}
-	}
-
-	getTodoId(index: number, todo: TodoDto): number {
-		return todo.id!;
 	}
 }
