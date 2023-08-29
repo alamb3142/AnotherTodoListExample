@@ -37,7 +37,7 @@ public class TodoReadRepository : ITodoReadRepository
 	{
 		var filter = string.IsNullOrWhiteSpace(searchTerm)
 			? ""
-			: " WHERE Title LIKE '%' + @SearchTerm + '%'";
+			: " WHERE Title LIKE '%' + @SearchTerm + '%' ";
 
 		var sql = @"
 SELECT
