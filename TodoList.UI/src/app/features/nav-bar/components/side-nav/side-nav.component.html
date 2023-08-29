@@ -4,11 +4,11 @@
 	</div>
 	<div class="nav-option-container">
 		<!-- TODO: better isSelected logic, this doesn't extend well when we start navigating to /lists/123 -->
-		<div class="nav-option" [ngClass]="isSelected('home') ? 'selected' : ''">
+		<div class="nav-option" [ngClass]="isSelected('home') ? 'selected' : ''" (click)="home()">
 			<fa-icon [icon]="icons.home" [fixedWidth]="true"></fa-icon>
 			<p>Home</p>
 		</div>
-		<div class="nav-option" [ngClass]="isSelected('lists') ? 'selected' : ''">
+		<div class="nav-option" [ngClass]="isSelected('lists') ? 'selected' : ''" (click)="lists()">
 			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
 			<p>Lists</p>
 		</div>

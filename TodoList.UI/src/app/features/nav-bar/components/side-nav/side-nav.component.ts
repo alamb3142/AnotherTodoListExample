@@ -9,6 +9,7 @@ import {
 	faList
 } from '@fortawesome/free-solid-svg-icons';
 import { PageSelectorService } from '../../services/page-selector.service';
+import { Pages } from 'src/app/core/enums/pages';
 
 @Component({
 	selector: 'app-side-nav',
@@ -28,7 +29,16 @@ export class SideNavComponent {
 	}
 
 	public isSelected(page: string): boolean {
-		return page === this.pageSelector.currentPage;
+		console.log(this.pageSelector.currentPage());
+		return page === this.pageSelector.currentPage();
+	}
+
+	public home(): void {
+		this.pageSelector.select(Pages.home);
+	}
+
+	public lists(): void {
+		this.pageSelector.select(Pages.lists);
 	}
 }
 
