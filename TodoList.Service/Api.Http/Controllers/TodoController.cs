@@ -53,7 +53,7 @@ public class TodoController : ControllerBase
 		CancellationToken cancellationToken
 	)
 	{
-		GetAllTodosQueryResponse response = await _mediator.Send(new GetAllTodosQuery());
+		GetAllTodosQueryResponse response = await _mediator.Send(new GetAllTodosQuery(), cancellationToken);
 		return Ok(response);
 	}
 
