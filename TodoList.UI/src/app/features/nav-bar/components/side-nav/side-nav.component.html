@@ -1,5 +1,31 @@
 <div class="feature-container">
-	<div *ngFor="let todoList of todoLists$ | async">
-		<p>{{ todoList.title }}</p>
-	</div>	
+	<div class="banner">
+		<p>#TODO:</p>
+	</div>
+	<div class="nav-option-container">
+		<!-- TODO: better isSelected logic, this doesn't extend well when we start navigating to /lists/123 -->
+		<div class="nav-option" [ngClass]="isSelected('home') ? 'selected' : ''">
+			<fa-icon [icon]="icons.home" [fixedWidth]="true"></fa-icon>
+			<p>Home</p>
+		</div>
+		<div class="nav-option" [ngClass]="isSelected('lists') ? 'selected' : ''">
+			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
+			<p>Lists</p>
+		</div>
+		<div class="nav-option" [ngClass]="isSelected('calendar') ? 'selected' : ''">
+			<fa-icon [icon]="icons.calendar" [fixedWidth]="true"></fa-icon>
+			<p>Calendar</p>
+		</div>
+	</div>
+	<!-- TODO: some kind of break between pages & lists -->
+	<div class="nav-option-container">
+		<div class="nav-option" *ngFor="let todoList of todoLists$ | async">
+			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
+			<p>{{ todoList.title }}</p>
+		</div>
+		<div class="nav-option">
+			<fa-icon [icon]="icons.plus" [fixedWidth]="true"></fa-icon>
+			<p>New</p>
+		</div>
+	</div>
 </div>

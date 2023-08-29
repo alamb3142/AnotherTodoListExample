@@ -1,0 +1,44 @@
+:host {
+	background-color: var(--color-shadow);
+}
+
+.nav-option {
+	width: 100%;
+	height: 3em;
+	display: flex;
+	flex-direction: row;
+	gap: 1em;
+	justify-content: flex-start;
+	align-items: center;
+	&:hover {
+		background-color: var(--color-secondary);
+		cursor: pointer;
+	}
+}
+
+.nav-option-container {
+	padding: 1em 0em 1em 0em;
+}
+
+.selected {
+	background-color: var(--color-primary);
+}
+
+.banner {
+	width: 100%;
+	height: 4em;
+	background-color: var(--color-secondary);
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	p {
+		font-weight: bold;	
+		font-size: 16pt;
+		margin: 0;
+		padding-left: 0.8em;
+	}
+}
+
+fa-icon {
+	padding-left: 0.5em;
+}
