@@ -1,6 +1,4 @@
-<div class="container">
-	<app-side-nav class="side-nav"></app-side-nav>
-	<div class="main-content">
-		<app-todo-list class="main-content"></app-todo-list>
-	</div>
-</div>
+<ng-template #content>
+	<app-todo-list></app-todo-list>
+</ng-template>
+<app-default-layout [templateRef]="content"></app-default-layout>
