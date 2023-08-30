@@ -1,14 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { FormControl, NonNullableFormBuilder } from '@angular/forms';
-import {
-	BehaviorSubject,
-	Observable,
-	combineLatest,
-	debounceTime,
-	startWith,
-	switchMap,
-	tap
-} from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { TodoDto } from 'src/app/core/api/http/clients/clients';
 import { TodoService } from 'src/app/core/api/http/todo.service';
 
@@ -17,55 +9,37 @@ import { TodoService } from 'src/app/core/api/http/todo.service';
 	templateUrl: './todo-list.component.html',
 	styleUrls: ['./todo-list.component.scss']
 })
-export class TodoListComponent {
+export class TodoListComponent implements OnDestroy {
 	@Input() public todoListId?: number;
 
-	newTodo: FormControl<string> = this.fb.control('');
-	// searchTodos: FormControl<string> = this.fb.control('');
-	todos$: Observable<TodoDto[]>;
+	public newTodo: FormControl<string> = this.formBuilder.control('');
+	public todos$: Observable<TodoDto[]>;
 
-	private refreshRequested$ = new BehaviorSubject<void>(undefined);
+	private destroy$ = new Subject<void>();
 
 	constructor(
 		private readonly todoService: TodoService,
-		private readonly fb: NonNullableFormBuilder
+		private readonly formBuilder: NonNullableFormBuilder
 	) {
-		// const searchTodos$ = this.searchTodos.valueChanges.pipe(
-		// 	debounceTime(300),
-		// 	startWith('')
-		// );
-		this.todos$ = this.refreshRequested$.pipe(
-			startWith(undefined),
-			switchMap(() => {
-				return !!this.todoListId
-					? this.todoService.getForList(this.todoListId)
-					: this.todoService.getAll();
-			})
-		);
+		this.todos$ = !!this.todoListId
+			? this.todoService.getForList(this.todoListId)
+			: this.todoService.getAll();
 	}
 
-	addTodo() {
+	public addTodo(): void {
 		this.todoService
 			.create(this.newTodo.value)
-			.pipe(
-				tap(() => {
-					this.newTodo.reset();
-					this.refreshRequested$.next();
-				})
-			)
-			.subscribe();
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(() => this.newTodo.reset());
 	}
 
-	completeTodo(todo: TodoDto) {
-		todo.completed = !todo.completed;
-		this.todoService.complete(todo.id!).subscribe(() => {
-			this.refreshRequested$.next();
-		});
-	}
-
-	handleKeyPress(event: KeyboardEvent) {
+	public handleKeyPress(event: KeyboardEvent): void {
 		if (event.key == 'Enter') {
 			this.addTodo();
 		}
+	}
+
+	public ngOnDestroy(): void {
+		this.destroy$.complete();
 	}
 }
