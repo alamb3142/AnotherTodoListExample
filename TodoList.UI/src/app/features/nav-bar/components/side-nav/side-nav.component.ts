@@ -29,7 +29,6 @@ export class SideNavComponent {
 	}
 
 	public isSelected(page: string): boolean {
-		console.log(this.pageSelector.currentPage());
 		return page === this.pageSelector.currentPage();
 	}
 
