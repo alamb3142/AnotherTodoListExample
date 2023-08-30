@@ -3,6 +3,7 @@ import {
 	EventEmitter,
 	Input,
 	OnDestroy,
+	OnInit,
 	Output
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -14,17 +15,23 @@ import { TodoService } from 'src/app/core/api/http/todo.service';
 	templateUrl: './todo-card.component.html',
 	styleUrls: ['./todo-card.component.scss']
 })
-export class TodoCardComponent implements OnDestroy {
-	@Input()
-	public todo!: TodoDto;
-	@Output()
-	public todoCompleted = new EventEmitter<void>();
+export class TodoCardComponent implements OnInit, OnDestroy {
+	@Input() public todo!: TodoDto;
+	@Output() public todoCompleted = new EventEmitter<void>();
+	public disabled: boolean = false;
 
 	private destroy$ = new Subject<void>();
 
 	constructor(private readonly todoService: TodoService) { }
 
-	public complete() {
+	public ngOnInit(): void {
+		this.disabled = this.todo.completed;
+	}
+
+	public complete(): void {
+		if (this.disabled) return;
+
+		this.disabled = true;
 		this.todoService
 			.complete(this.todo.id)
 			.pipe(takeUntil(this.destroy$))

@@ -1,3 +1,11 @@
-<div class="todoCardContainer">
-	<p>{{ todo.title }}</p>
+<div class="todoCardContainer" (click)="complete()">
+	<label for="todo-checkbox">{{ todo.title }}</label>
+	<!-- TODO: something prettier than a default checkbox -->
+	<input
+		type="checkbox"
+		id="todo-checkbox"
+		[checked]="todo.completed"
+		(checked)="complete()"
+		[disabled]="disabled"
+	/>
 </div>

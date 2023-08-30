@@ -1,7 +1,19 @@
 .todoCardContainer {
 	width: 100%;
+	background-color: var(--color-shadow);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0em 1em 0em 1em;
+	min-height: 4rem;
+	border-radius: 0.5rem;
 }
 
 p {
-	padding-right: 1em;
+	display: block;
+}
+
+input {
+	height: 1.5em;
+	width: 1.5em;
 }
