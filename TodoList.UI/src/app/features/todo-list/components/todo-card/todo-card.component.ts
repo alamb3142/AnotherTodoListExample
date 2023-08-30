@@ -15,30 +15,24 @@ import { TodoService } from 'src/app/core/api/http/todo.service';
 	templateUrl: './todo-card.component.html',
 	styleUrls: ['./todo-card.component.scss']
 })
-export class TodoCardComponent implements OnInit, OnDestroy {
+export class TodoCardComponent implements OnDestroy {
 	@Input() public todo!: TodoDto;
 	@Output() public todoCompleted = new EventEmitter<void>();
-	public disabled: boolean = false;
 
 	private destroy$ = new Subject<void>();
 
 	constructor(private readonly todoService: TodoService) { }
 
-	public ngOnInit(): void {
-		this.disabled = this.todo.completed;
-	}
-
 	public complete(): void {
-		if (this.disabled) return;
+		if (this.todo.completed) return;
 
-		this.disabled = true;
 		this.todoService
 			.complete(this.todo.id)
 			.pipe(takeUntil(this.destroy$))
 			.subscribe();
 	}
 
-	ngOnDestroy(): void {
+	public ngOnDestroy(): void {
 		this.destroy$.complete();
 	}
 }
