@@ -2,12 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Pages } from 'src/app/core/enums/pages';
 
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable()
 export class PageSelectorService {
-	constructor(private readonly router: Router) {
-	}
+	constructor(private readonly router: Router) {}
 
 	public select(page: Pages): void {
 		this.router.navigate([page]);
