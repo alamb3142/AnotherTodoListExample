@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
 	GetAllTodoListsQuery,
 	TodoListClient,
@@ -20,7 +20,10 @@ export class TodoListService {
 	}
 
 	public Create(name: string): Observable<void> {
-		return this.client.todoListsPost(name).pipe(map(() => undefined));
+		return this.client.todoListsPost(name).pipe(
+			map(() => undefined),
+			tap(() => this.refreshSource$.next())
+		);
 	}
 
 	public Get(): Observable<TodoListSummaryDto[]> {
