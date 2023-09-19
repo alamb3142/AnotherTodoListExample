@@ -23,7 +23,7 @@ export class TodoListComponent implements OnDestroy {
 	) {
 		this.todos$ = !!this.todoListId
 			? this.todoService.getForList(this.todoListId)
-			: this.todoService.getAll();
+			: this.todoService.getFiltered();
 	}
 
 	public addTodo(): void {
