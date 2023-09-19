@@ -1,1 +1,19 @@
-<p>list-overview works!</p>
+<div class="feature-container">
+	<div class="todo-list-container">
+		<div class="todo-list-list">
+			<div class="todo-list-title todo-item">TODO:</div>
+			<app-list-card
+				*ngFor="let list of lists$ | async"
+				[todoList]="list"
+				class="todo-list-item"></app-list-card>
+			<div class="todo-list-item">
+				<input
+					type="text"
+					[formControl]="newListControl"
+					(keypress)="handleKeyPress($event)"
+					class="todo-list-input"
+					placeholder="add a list ..."/>
+			</div>
+		</div>
+	</div>
+</div>
