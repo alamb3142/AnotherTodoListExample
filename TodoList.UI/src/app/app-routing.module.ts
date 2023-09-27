@@ -23,7 +23,7 @@ const routes: Routes = [
 			)
 	},
 	{
-		path: 'todo-list/:id',
+		path: Pages.list,
 		loadChildren: () =>
 			import('./pages/todo-list-page/todo-list-page.module').then(
 				m => m.TodoListPageModule
@@ -32,7 +32,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes, { bindToComponentInputs: true })],
+	imports: [RouterModule.forRoot(routes)],
 	exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

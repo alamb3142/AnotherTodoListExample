@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-todo-list-page',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./todo-list-page.component.scss']
 })
 export class TodoListPageComponent {
+	public todoListId!: number;
 
+	constructor(route: ActivatedRoute) {
+		this.todoListId = route.snapshot.params['id'];
+	}
 }

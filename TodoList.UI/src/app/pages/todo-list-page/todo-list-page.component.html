@@ -1,1 +1,4 @@
-<p>todo-list-page works!</p>
+<ng-template #content>
+	<app-todo-list [todoListId]="todoListId"></app-todo-list>
+</ng-template>
+<app-default-layout [templateRef]="content"></app-default-layout>
