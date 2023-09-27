@@ -1,5 +1,6 @@
 using Domain.Common;
 using Domain.Common.ValueObjects;
+using Domain.TodoLists;
 using Domain.Todos;
 using FluentResults;
 using FluentValidation;
@@ -10,31 +11,43 @@ namespace Application.Todos.CreateTodo;
 public class CreateTodoCommand : ICommand<Result>
 {
 	public required string Title { get; init; }
+	public int? TodoListId { get; init; }
 }
 
 public class CreateTodoCommandHandler : ICommandHandler<CreateTodoCommand, Result>
 {
-	private readonly ITodoRepository repository;
+	private readonly ITodoRepository _todoRepository;
+	private readonly ITodoListRepository _todoListRepository;
 
-	public CreateTodoCommandHandler(ITodoRepository todoRepository)
+	public CreateTodoCommandHandler(ITodoRepository todoRepository, ITodoListRepository todoListRepository)
 	{
-		repository = todoRepository;
+		_todoRepository = todoRepository;
+		_todoListRepository = todoListRepository;
 	}
 
-	public ValueTask<Result> Handle(
+	public async ValueTask<Result> Handle(
 		CreateTodoCommand command,
 		CancellationToken cancellationToken
 	)
 	{
 		Result<Title> titleResult = Title.Create(command.Title);
 		if (titleResult.IsFailed)
-			return ValueTask.FromResult(titleResult.ToResult());
+			return titleResult.ToResult();
 
 		var todo = Todo.Create(titleResult.Value);
-		repository.Create(todo);
+		_todoRepository.Create(todo);
 
-		var result = Result.Ok();
-		return new ValueTask<Result>(result);
+		if (!command.TodoListId.HasValue)
+			return Result.Ok();
+
+		var todoListResult = await _todoListRepository.GetByIdAsync(command.TodoListId.Value, cancellationToken);
+		if (todoListResult.IsFailed)
+			return todoListResult.ToResult();
+
+		var todoList = todoListResult.Value;
+		todo.AddToList(todoList);
+
+		return Result.Ok();
 	}
 }
 

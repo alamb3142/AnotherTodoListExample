@@ -88,12 +88,14 @@ export class TodoClient {
         return _observableOf(null as any);
     }
 
-    todosPost(title?: string | undefined): Observable<number> {
+    todosPost(title?: string | undefined, todoListId?: number | null | undefined): Observable<number> {
         let url_ = this.baseUrl + "/Todos?";
         if (title === null)
             throw new Error("The parameter 'title' cannot be null.");
         else if (title !== undefined)
             url_ += "Title=" + encodeURIComponent("" + title) + "&";
+        if (todoListId !== undefined && todoListId !== null)
+            url_ += "todoListId=" + encodeURIComponent("" + todoListId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
