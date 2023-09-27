@@ -13,14 +13,16 @@ export class TodoListComponent implements OnDestroy {
 	@Input() public todoListId?: number;
 
 	public newTodo: FormControl<string> = this.formBuilder.control('');
-	public todos$: Observable<TodoDto[]>;
+	public todos$!: Observable<TodoDto[]>;
 
 	private destroy$ = new Subject<void>();
 
 	constructor(
 		private readonly todoService: TodoService,
 		private readonly formBuilder: NonNullableFormBuilder
-	) {
+	) {}
+
+	public ngOnInit(): void {
 		this.todos$ = !!this.todoListId
 			? this.todoService.getForList(this.todoListId)
 			: this.todoService.getFiltered();
@@ -28,7 +30,7 @@ export class TodoListComponent implements OnDestroy {
 
 	public addTodo(): void {
 		this.todoService
-			.create(this.newTodo.value)
+			.create(this.newTodo.value, this.todoListId)
 			.pipe(takeUntil(this.destroy$))
 			.subscribe(() => this.newTodo.reset());
 	}

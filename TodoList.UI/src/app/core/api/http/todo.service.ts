@@ -29,12 +29,13 @@ export class TodoService implements OnDestroy {
 			.pipe(startWith(undefined));
 	}
 
-	public create(title: string): Observable<void> {
-		return this.client.todosPost(title).pipe(
+	public create(title: string, todoListId?: number): Observable<void> {
+		let response$ = this.client.todosPost(title, todoListId).pipe(
 			catchError(() => of(undefined)), // TODO: fix create endpoint
-			map(() => undefined),
-			tap(() => this.refreshSource$.next())
+			map(() => undefined)
 		);
+
+		return response$.pipe(tap(() => this.refreshSource$.next()));
 	}
 
 	public complete(todoId: number): Observable<void> {
