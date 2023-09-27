@@ -17,6 +17,7 @@ import { TodoListSummaryDto } from 'src/app/core/api/http/clients/clients';
 	styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent {
+	// TODO: this component is looking a bit thin, maybe we don't need the pageSelectorService?
 	public todoLists$: Observable<TodoListSummaryDto[]>;
 
 	public icons = ICONS;
@@ -38,6 +39,10 @@ export class SideNavComponent {
 
 	public lists(): void {
 		this.pageSelector.select(Pages.lists);
+	}
+
+	public list(id: number): void {
+		this.pageSelector.select(Pages.list, id);
 	}
 }
 

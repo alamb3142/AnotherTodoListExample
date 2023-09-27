@@ -6,8 +6,13 @@ import { Pages } from 'src/app/core/enums/pages';
 export class PageSelectorService {
 	constructor(private readonly router: Router) {}
 
-	public select(page: Pages): void {
-		this.router.navigate([page]);
+	public select(page: Pages, id?: number): void {
+		let route: string = page;
+
+		if (!!id) route += `/${id}`;
+
+		this.router.navigate([Pages.home]);
+		this.router.navigate([route]);
 	}
 
 	currentPage(): string {

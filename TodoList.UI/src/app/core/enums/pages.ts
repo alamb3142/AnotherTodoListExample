@@ -1,5 +1,6 @@
 export enum Pages {
 	home = 'home',
 	lists = 'lists',
-	calendar = 'calendar'
+	calendar = 'calendar',
+	list = 'todo-list'
 }

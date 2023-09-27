@@ -19,7 +19,7 @@
 	</div>
 	<!-- TODO: some kind of break between pages & lists -->
 	<div class="nav-option-container">
-		<div class="nav-option" *ngFor="let todoList of todoLists$ | async">
+		<div class="nav-option" *ngFor="let todoList of todoLists$ | async" (click)="list(todoList.id)">
 			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
 			<p>{{ todoList.title }}</p>
 		</div>
