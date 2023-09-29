@@ -25,8 +25,9 @@ export class TodoListComponent implements OnDestroy {
 	) { }
 
 	public ngOnInit(): void {
+		let todos$: Observable<TodoDto[]>;
 		if (!!this.todoListId) {
-			this.todos$ = this.todoListId.pipe(
+			todos$ = this.todoListId.pipe(
 				tap(id => (this.currentTodoListId = id)),
 				switchMap(id =>
 					this.todoService.todos$.pipe(
@@ -35,8 +36,12 @@ export class TodoListComponent implements OnDestroy {
 				)
 			);
 		} else {
-			this.todos$ = this.todoService.todos$;
+			todos$ = this.todoService.todos$;
 		}
+
+		this.todos$ = todos$.pipe(
+			map(todos => todos.filter(t => !t.completed))
+		)
 	}
 
 	public addTodo(): void {
