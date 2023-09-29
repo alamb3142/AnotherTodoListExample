@@ -26,7 +26,7 @@ export class SideNavComponent {
 		todoListService: TodoListService,
 		private readonly pageSelector: PageSelectorService
 	) {
-		this.todoLists$ = todoListService.Get().pipe(shareReplay(1));
+		this.todoLists$ = todoListService.todoLists$.pipe(shareReplay(1));
 	}
 
 	public isSelected(page: string): boolean {

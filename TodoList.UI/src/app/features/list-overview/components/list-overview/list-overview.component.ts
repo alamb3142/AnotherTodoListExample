@@ -19,7 +19,7 @@ export class ListOverviewComponent implements OnDestroy {
 		private readonly todoListService: TodoListService,
 		private readonly formBuilder: NonNullableFormBuilder
 	) {
-		this.lists$ = this.todoListService.Get();
+		this.lists$ = this.todoListService.todoLists$;
 	}
 
 	public addTodoList(): void {

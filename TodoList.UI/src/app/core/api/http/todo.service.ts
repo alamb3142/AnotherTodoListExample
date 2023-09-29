@@ -6,6 +6,7 @@ import {
 	catchError,
 	map,
 	of,
+	shareReplay,
 	startWith,
 	switchMap,
 	takeUntil,
@@ -16,6 +17,8 @@ import {
 	providedIn: 'root'
 })
 export class TodoService implements OnDestroy {
+	public todos$!: Observable<TodoDto[]>;
+
 	private refresh$!: Observable<void>;
 	private refreshSource$ = new Subject<void>();
 	private destroy$ = new Subject<void>();
@@ -27,6 +30,16 @@ export class TodoService implements OnDestroy {
 		this.refresh$ = this.refreshSource$
 			.asObservable()
 			.pipe(startWith(undefined));
+
+		this.todos$ =  this.refresh$.pipe(
+			switchMap(() => this.client.todosGet()),
+			map(result => {
+				let todos = result.todos ?? [];
+
+				return todos.filter(t => t.completed == false);
+			}),
+			shareReplay(1)
+		);
 	}
 
 	public create(title: string, todoListId?: number): Observable<void> {
@@ -54,13 +67,6 @@ export class TodoService implements OnDestroy {
 		return this.client.addToList(todoListId, todoId).pipe(
 			takeUntil(this.destroy$),
 			tap(() => this.refreshSource$.next())
-		);
-	}
-
-	public getAll(): Observable<TodoDto[]> {
-		return this.refresh$.pipe(
-			switchMap(() => this.client.todosGet()),
-			map(result => result.todos ?? [])
 		);
 	}
 

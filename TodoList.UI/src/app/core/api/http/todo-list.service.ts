@@ -4,12 +4,14 @@ import {
 	TodoListClient,
 	TodoListSummaryDto
 } from './clients/clients';
-import { Observable, Subject, map, startWith, switchMap, tap } from 'rxjs';
+import { Observable, Subject, map, shareReplay, startWith, switchMap, tap } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class TodoListService {
+	public todoLists$!: Observable<TodoListSummaryDto[]>;
+
 	private refreshSource$ = new Subject<void>();
 	private refresh$!: Observable<void>;
 
@@ -17,20 +19,19 @@ export class TodoListService {
 		this.refresh$ = this.refreshSource$
 			.asObservable()
 			.pipe(startWith(undefined));
+
+		this.todoLists$ = this.refresh$.pipe(
+			switchMap(() =>
+				this.client.todoListsGet({} as GetAllTodoListsQuery)
+			),
+			shareReplay(1)
+		);
 	}
 
 	public Create(name: string): Observable<void> {
 		return this.client.todoListsPost(name).pipe(
 			map(() => undefined),
 			tap(() => this.refreshSource$.next())
-		);
-	}
-
-	public Get(): Observable<TodoListSummaryDto[]> {
-		return this.refresh$.pipe(
-			switchMap(() =>
-				this.client.todoListsGet({} as GetAllTodoListsQuery)
-			)
 		);
 	}
 
