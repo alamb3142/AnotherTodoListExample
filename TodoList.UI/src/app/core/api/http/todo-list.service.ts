@@ -4,7 +4,8 @@ import {
 	TodoListClient,
 	TodoListSummaryDto
 } from './clients/clients';
-import { Observable, Subject, map, shareReplay, startWith, switchMap, tap } from 'rxjs';
+import { Observable, map, shareReplay, startWith, switchMap, tap } from 'rxjs';
+import { ApiEventsService, EventType } from './api-events.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,13 +13,19 @@ import { Observable, Subject, map, shareReplay, startWith, switchMap, tap } from
 export class TodoListService {
 	public todoLists$!: Observable<TodoListSummaryDto[]>;
 
-	private refreshSource$ = new Subject<void>();
 	private refresh$!: Observable<void>;
 
-	constructor(private readonly client: TodoListClient) {
-		this.refresh$ = this.refreshSource$
-			.asObservable()
-			.pipe(startWith(undefined));
+	constructor(
+		private readonly client: TodoListClient,
+		private readonly eventBus: ApiEventsService
+	) {
+		this.refresh$ = this.subscribeTo([
+			EventType.TodoListCreated,
+			EventType.TodoListRenamed,
+			EventType.TodoCreated,
+			EventType.TodoMovedToList,
+			EventType.TodoCompleted
+		]);
 
 		this.todoLists$ = this.refresh$.pipe(
 			switchMap(() =>
@@ -31,13 +38,20 @@ export class TodoListService {
 	public Create(name: string): Observable<void> {
 		return this.client.todoListsPost(name).pipe(
 			map(() => undefined),
-			tap(() => this.refreshSource$.next())
+			tap(() => this.eventBus.publish(EventType.TodoListCreated))
 		);
 	}
 
 	public Rename(todoListId: number, newName: string): Observable<void> {
 		return this.client
 			.rename(todoListId, newName)
-			.pipe(tap(() => this.refreshSource$.next()));
+			.pipe(tap(() => this.eventBus.publish(EventType.TodoListRenamed)));
+	}
+	private subscribeTo(events: EventType[]): Observable<void> {
+		return this.eventBus.subscribersFor(events).pipe(
+			map(() => undefined),
+			startWith(undefined),
+			shareReplay(1)
+		);
 	}
 }

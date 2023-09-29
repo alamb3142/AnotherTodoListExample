@@ -12,6 +12,7 @@ import {
 	takeUntil,
 	tap
 } from 'rxjs';
+import { ApiEventsService, EventType } from './api-events.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -20,78 +21,61 @@ export class TodoService implements OnDestroy {
 	public todos$!: Observable<TodoDto[]>;
 
 	private refresh$!: Observable<void>;
-	private refreshSource$ = new Subject<void>();
 	private destroy$ = new Subject<void>();
 
-	constructor(private readonly client: TodoClient) {
-		// Create refresh$ here because .asObservable creates
-		// a new Observable & we want to share a single instance
-		// across the service
-		this.refresh$ = this.refreshSource$
-			.asObservable()
-			.pipe(startWith(undefined));
+	constructor(
+		private readonly client: TodoClient,
+		private readonly eventBus: ApiEventsService
+	) {
+		this.refresh$ = this.subscribeTo([
+			EventType.TodoCreated,
+			EventType.TodoCompleted,
+			EventType.TodoRenamed
+		]);
 
-		this.todos$ =  this.refresh$.pipe(
+		this.todos$ = this.refresh$.pipe(
 			switchMap(() => this.client.todosGet()),
-			map(result => {
-				let todos = result.todos ?? [];
-
-				return todos.filter(t => t.completed == false);
-			}),
+			map(result => result.todos ?? []),
 			shareReplay(1)
 		);
 	}
 
 	public create(title: string, todoListId?: number): Observable<void> {
-		let response$ = this.client.todosPost(title, todoListId).pipe(
+		return this.client.todosPost(title, todoListId).pipe(
 			catchError(() => of(undefined)), // TODO: fix create endpoint
-			map(() => undefined)
+			map(() => undefined),
+			tap(() => this.eventBus.publish(EventType.TodoCreated))
 		);
-
-		return response$.pipe(tap(() => this.refreshSource$.next()));
 	}
 
 	public complete(todoId: number): Observable<void> {
 		return this.client
 			.complete(todoId)
-			.pipe(tap(() => this.refreshSource$.next()));
+			.pipe(tap(() => this.eventBus.publish(EventType.TodoCompleted)));
 	}
 
 	public rename(todoId: number, newName: string): Observable<void> {
 		return this.client
 			.rename(todoId, newName)
-			.pipe(tap(() => this.refreshSource$.next()));
+			.pipe(tap(() => this.eventBus.publish(EventType.TodoRenamed)));
 	}
 
 	public addToList(todoId: number, todoListId: number): Observable<void> {
 		return this.client.addToList(todoListId, todoId).pipe(
 			takeUntil(this.destroy$),
-			tap(() => this.refreshSource$.next())
-		);
-	}
-
-	public getForList(todoListId: number): Observable<TodoDto[]> {
-		return this.refresh$.pipe(
-			switchMap(() => this.client.forList(todoListId))
-		);
-	}
-
-	public getFiltered(
-		searchTerm?: string,
-		offset?: number,
-		fetchNum?: number
-	): Observable<TodoDto[]> {
-		return this.refresh$.pipe(
-			switchMap(() => this.client.filtered(searchTerm, offset, fetchNum)),
-			map(result => {
-				let todos = result.todos ?? [];
-
-				return todos.filter(t => t.completed == false);
-			})
+			tap(() => this.eventBus.publish(EventType.TodoMovedToList))
 		);
 	}
 
 	public ngOnDestroy(): void {
 		this.destroy$.complete();
+	}
+
+	private subscribeTo(events: EventType[]): Observable<void> {
+		return this.eventBus.subscribersFor(events).pipe(
+			map(() => undefined),
+			startWith(undefined),
+			shareReplay(1)
+		);
 	}
 }
