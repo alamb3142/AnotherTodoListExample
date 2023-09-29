@@ -1,5 +1,6 @@
 import { Component, Inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list-page',
@@ -7,9 +8,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./todo-list-page.component.scss']
 })
 export class TodoListPageComponent {
-	public todoListId!: number;
+	public todoListId!: Observable<number>;
 
 	constructor(route: ActivatedRoute) {
-		this.todoListId = route.snapshot.params['id'];
+		this.todoListId = route.params.pipe(map(params => params['id']))
 	}
 }
