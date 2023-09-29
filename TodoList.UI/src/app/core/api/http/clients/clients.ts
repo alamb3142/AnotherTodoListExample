@@ -95,7 +95,7 @@ export class TodoClient {
         else if (title !== undefined)
             url_ += "Title=" + encodeURIComponent("" + title) + "&";
         if (todoListId !== undefined && todoListId !== null)
-            url_ += "todoListId=" + encodeURIComponent("" + todoListId) + "&";
+            url_ += "TodoListId=" + encodeURIComponent("" + todoListId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -687,6 +687,7 @@ export class TodoDto implements ITodoDto {
     id!: number;
     title!: string;
     completed!: boolean;
+    todoListId!: number | undefined;
 
     constructor(data?: ITodoDto) {
         if (data) {
@@ -702,6 +703,7 @@ export class TodoDto implements ITodoDto {
             this.id = _data["id"];
             this.title = _data["title"];
             this.completed = _data["completed"];
+            this.todoListId = _data["todoListId"];
         }
     }
 
@@ -717,6 +719,7 @@ export class TodoDto implements ITodoDto {
         data["id"] = this.id;
         data["title"] = this.title;
         data["completed"] = this.completed;
+        data["todoListId"] = this.todoListId;
         return data;
     }
 }
@@ -725,6 +728,7 @@ export interface ITodoDto {
     id: number;
     title: string;
     completed: boolean;
+    todoListId: number | undefined;
 }
 
 export class GetFilteredTodosQueryResponse implements IGetFilteredTodosQueryResponse {

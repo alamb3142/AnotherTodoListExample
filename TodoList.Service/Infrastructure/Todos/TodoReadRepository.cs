@@ -18,7 +18,7 @@ public class TodoReadRepository : ITodoReadRepository
 	{
 		var query =
 			@"
-			SELECT Id, Title = Title_Value, Completed
+			SELECT Id, Title = Title_Value, Completed, TodoListId
 			FROM Todos
 		";
 
