@@ -23,6 +23,7 @@ internal class TodoListReadRepository : ITodoListReadRepository
 					SELECT COUNT(*)
 					FROM [dbo].[Todos] AS t
 					WHERE t.TodoListId = tl.Id
+						AND t.Completed = 0
 				)
 			FROM [dbo].[TodoLists] AS tl";
 
