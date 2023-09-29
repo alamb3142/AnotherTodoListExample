@@ -16,6 +16,23 @@
 	}
 }
 
+.space-between-box {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	padding-right: 1em;
+	p {
+		display: block;
+	}
+}
+
+.not-a-horizontal-rule {
+	background-color: var(--color-primary);
+	padding: 0;
+	margin: 0;
+	height: 4px;
+}
+
 .nav-option-container {
 	padding: 1em 0em 1em 0em;
 }

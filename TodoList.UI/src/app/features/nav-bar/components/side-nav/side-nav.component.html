@@ -17,11 +17,14 @@
 			<p>Calendar</p>
 		</div>
 	</div>
-	<!-- TODO: some kind of break between pages & lists -->
+	<div class="not-a-horizontal-rule"><div>
 	<div class="nav-option-container">
 		<div class="nav-option" *ngFor="let todoList of todoLists$ | async" (click)="list(todoList.id)">
 			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
-			<p>{{ todoList.title }}</p>
+			<div class="space-between-box">
+				<p>{{ todoList.title }}</p>
+				<p>{{ todoList.todoCount }}</p>
+			</div>
 		</div>
 		<div class="nav-option">
 			<fa-icon [icon]="icons.plus" [fixedWidth]="true"></fa-icon>
