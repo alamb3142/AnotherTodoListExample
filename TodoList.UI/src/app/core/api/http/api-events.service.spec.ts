@@ -12,7 +12,7 @@ describe('ApiEventsService', () => {
 	it('publishes events', fakeAsync(() => {
 		let emitted = false;
 		let eventType = {} as EventType;
-		service.getMany([EventType.TodoCreated]).subscribe(event => {
+		service.subscribersFor([EventType.TodoCreated]).subscribe(event => {
 			eventType = event;
 			emitted = true;
 		});
@@ -29,7 +29,7 @@ describe('ApiEventsService', () => {
 	it('does not emit when event type not subscribed to', fakeAsync(() => {
 		let emitted;
 		service
-			.getMany([
+			.subscribersFor([
 				EventType.TodoCreated,
 				EventType.TodoListCreated,
 				EventType.TodoCompleted

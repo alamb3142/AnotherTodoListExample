@@ -13,11 +13,11 @@ export class ApiEventsService {
 		this.publisher$.next(event);
 	}
 
-	public getSingle(eventType: EventType): Observable<EventType> {
-		return this.getMany([eventType]);
+	public subscriberFor(eventType: EventType): Observable<EventType> {
+		return this.subscribersFor([eventType]);
 	}
 
-	public getMany(eventTypes: EventType[]): Observable<EventType> {
+	public subscribersFor(eventTypes: EventType[]): Observable<EventType> {
 		return this.publisher$
 			.asObservable()
 			.pipe(filter(event => eventTypes.includes(event)));
@@ -25,9 +25,12 @@ export class ApiEventsService {
 }
 
 export enum EventType {
+	// Todos
 	TodoCreated,
 	TodoRenamed,
 	TodoCompleted,
+	TodoMovedToList,
+	// TodoLists
 	TodoListCreated,
 	TodoListRenamed
 }
