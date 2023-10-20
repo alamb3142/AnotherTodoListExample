@@ -4,22 +4,27 @@
 	</div>
 	<div class="nav-option-container">
 		<!-- TODO: better isSelected logic, this doesn't extend well when we start navigating to /lists/123 -->
-		<div class="nav-option" [ngClass]="isSelected('home') ? 'selected' : ''" (click)="home()">
+		<div class="nav-option" [ngClass]="isSelected(pages.home) ? 'selected' : ''" (click)="home()">
 			<fa-icon [icon]="icons.home" [fixedWidth]="true"></fa-icon>
 			<p>Home</p>
 		</div>
-		<div class="nav-option" [ngClass]="isSelected('lists') ? 'selected' : ''" (click)="lists()">
+		<div class="nav-option" [ngClass]="isSelected(pages.lists) ? 'selected' : ''" (click)="lists()">
 			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
 			<p>Lists</p>
 		</div>
-		<div class="nav-option" [ngClass]="isSelected('calendar') ? 'selected' : ''">
-			<fa-icon [icon]="icons.calendar" [fixedWidth]="true"></fa-icon>
-			<p>Calendar</p>
-		</div>
+		<!-- <div class="nav-option" [ngClass]="isSelected('calendar') ? 'selected' : ''"> -->
+		<!-- 	<fa-icon [icon]="icons.calendar" [fixedWidth]="true"></fa-icon> -->
+		<!-- 	<p>Calendar</p> -->
+		<!-- </div> -->
 	</div>
 	<div class="not-a-horizontal-rule"><div>
 	<div class="nav-option-container">
-		<div class="nav-option" *ngFor="let todoList of todoLists$ | async" (click)="list(todoList.id)">
+		<div 
+			class="nav-option" 
+			*ngFor="let todoList of todoLists$ | async" 
+			(click)="list(todoList.id)"
+			[ngClass]="isSelected(pages.list, todoList.id) ? 'selected' : ''"
+		>
 			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
 			<div class="space-between-box">
 				<p>{{ todoList.title }}</p>

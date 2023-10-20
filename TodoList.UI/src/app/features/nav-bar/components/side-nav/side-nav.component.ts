@@ -17,10 +17,9 @@ import { TodoListSummaryDto } from 'src/app/core/api/http/clients/clients';
 	styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent {
-	// TODO: this component is looking a bit thin, maybe we don't need the pageSelectorService?
 	public todoLists$: Observable<TodoListSummaryDto[]>;
-
 	public icons = ICONS;
+	public pages = Pages;
 
 	constructor(
 		todoListService: TodoListService,
@@ -29,8 +28,12 @@ export class SideNavComponent {
 		this.todoLists$ = todoListService.todoLists$.pipe(shareReplay(1));
 	}
 
-	public isSelected(page: string): boolean {
-		return page === this.pageSelector.currentPage();
+	public isSelected(page: Pages, todoListId?: number): boolean {
+		let pageSelected = page === this.pageSelector.currentPage;
+		let todoListIdSelected = !!todoListId
+			? todoListId === this.pageSelector.todoListId
+			: true;
+		return pageSelected && todoListIdSelected;
 	}
 
 	public home(): void {
