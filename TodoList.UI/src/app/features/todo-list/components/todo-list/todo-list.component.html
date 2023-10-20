@@ -1,7 +1,7 @@
 <div class="feature-container">
 	<div class="todo-container">
 		<div class="todo-list">
-			<div class="todo-title todo-item">{{title}}</div>
+			<div class="todo-title todo-item">{{ title }}</div>
 			<!-- <div class="todo-item"> -->
 			<!-- 	<input -->
 			<!-- 		type="text" -->
@@ -12,14 +12,16 @@
 			<app-todo-card
 				*ngFor="let todo of todos$ | async"
 				[todo]="todo"
-				class="todo-item"></app-todo-card>
+				class="todo-item"
+			></app-todo-card>
 			<div class="todo-item">
 				<input
 					type="text"
 					[formControl]="newTodo"
 					(keypress)="handleKeyPress($event)"
 					class="todo-input"
-					placeholder="add a todo ..."/>
+					placeholder="add a todo ..."
+				/>
 			</div>
 		</div>
 	</div>
