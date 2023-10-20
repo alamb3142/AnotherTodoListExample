@@ -18,6 +18,20 @@ import { ApiEventsService, EventType } from './api-events.service';
 	providedIn: 'root'
 })
 export class TodoService implements OnDestroy {
+	/**
+	 * All the User's todos, emits whenever new changes are available
+	 *
+	 * @remarks
+	 * Will only trigger http requests if subscribed to, and will not
+	 * trigger additional http requests as subscribers are added
+	 *
+	 * @example
+	 * ```html
+	 * <div *ngFor="let todo of todos$ | async">
+	 * 	<!-- Display the todos, list will update as required -->
+	 * </div>
+	 * ```
+	 */
 	public todos$!: Observable<TodoDto[]>;
 
 	private refresh$!: Observable<void>;
