@@ -22,26 +22,20 @@ export class TodoListComponent implements OnDestroy {
 	constructor(
 		private readonly todoService: TodoService,
 		private readonly formBuilder: NonNullableFormBuilder
-	) { }
+	) {}
 
 	public ngOnInit(): void {
 		let todos$: Observable<TodoDto[]>;
+
 		if (!!this.todoListId) {
-			todos$ = this.todoListId.pipe(
-				tap(id => (this.currentTodoListId = id)),
-				switchMap(id =>
-					this.todoService.todos$.pipe(
-						map(todos => todos.filter(t => t.todoListId == id))
-					)
-				)
-			);
+			todos$ = this.filterByTodoList(this.todoListId);
 		} else {
 			todos$ = this.todoService.todos$;
 		}
 
 		this.todos$ = todos$.pipe(
 			map(todos => todos.filter(t => !t.completed))
-		)
+		);
 	}
 
 	public addTodo(): void {
@@ -59,5 +53,16 @@ export class TodoListComponent implements OnDestroy {
 
 	public ngOnDestroy(): void {
 		this.destroy$.complete();
+	}
+
+	private filterByTodoList(todoListId$: Observable<number>) {
+		return todoListId$.pipe(
+			tap(id => (this.currentTodoListId = id)),
+			switchMap(id =>
+				this.todoService.todos$.pipe(
+					map(todos => todos.filter(t => t.todoListId == id))
+				)
+			)
+		);
 	}
 }
