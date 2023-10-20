@@ -3,7 +3,6 @@ import {
 	EventEmitter,
 	Input,
 	OnDestroy,
-	OnInit,
 	Output
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -21,7 +20,7 @@ export class TodoCardComponent implements OnDestroy {
 
 	private destroy$ = new Subject<void>();
 
-	constructor(private readonly todoService: TodoService) { }
+	constructor(private readonly todoService: TodoService) {}
 
 	public complete(): void {
 		if (this.todo.completed) return;

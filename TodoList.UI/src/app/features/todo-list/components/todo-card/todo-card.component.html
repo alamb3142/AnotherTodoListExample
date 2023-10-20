@@ -1,4 +1,9 @@
-<div class="todoCardContainer" (click)="complete()">
+<div
+	class="todoCardContainer"
+	(click)="complete()"
+	(keypress)="complete()"
+	tabindex="0"
+>
 	<label for="todo-checkbox">{{ todo.title }}</label>
 	<input
 		type="checkbox"

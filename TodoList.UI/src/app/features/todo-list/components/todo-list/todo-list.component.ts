@@ -35,7 +35,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
 	) {}
 
 	public ngOnInit(): void {
-		let todos$: Observable<TodoDto[]> = !!this.todoListId
+		const todos$: Observable<TodoDto[]> = this.todoListId
 			? this.filterByTodoList(this.todoListId)
 			: this.todoService.todos$;
 
@@ -44,7 +44,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
 		);
 
 		if (!this.title && this.todoListId) {
-			combineLatest([this.todoListId!, this.todoListService.todoLists$])
+			combineLatest([this.todoListId, this.todoListService.todoLists$])
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(([todoListId, todoLists]) => {
 					this.title = todoLists.find(

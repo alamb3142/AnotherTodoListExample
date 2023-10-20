@@ -14,7 +14,7 @@ export class PageSelectorService {
 	]);
 
 	constructor(private readonly router: Router) {
-		let page = this.getPage();
+		const page = this.getPage();
 		this.currentPage = page;
 	}
 
@@ -24,17 +24,17 @@ export class PageSelectorService {
 
 		let route: string = page;
 
-		if (!!id) route += `/${id}`;
+		if (id) route += `/${id}`;
 
 		this.router.navigate([Pages.home]);
 		this.router.navigate([route]);
 	}
 
 	private getPage(): Pages {
-		let urlSegments = document.URL.split('/');
+		const urlSegments = document.URL.split('/');
 		let page: Pages | undefined = undefined;
 
-		for (let segment of urlSegments) {
+		for (const segment of urlSegments) {
 			if (this.pageMap.has(segment)) {
 				page = this.pageMap.get(segment);
 				break;

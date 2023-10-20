@@ -7,8 +7,6 @@ import { Observable, Subject, filter } from 'rxjs';
 export class ApiEventsService {
 	private publisher$ = new Subject<EventType>();
 
-	constructor() {}
-
 	public publish(event: EventType): void {
 		this.publisher$.next(event);
 	}

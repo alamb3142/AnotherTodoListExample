@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-default-layout',
@@ -6,5 +6,5 @@ import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
   styleUrls: ['./default-layout.component.scss']
 })
 export class DefaultLayoutComponent {
-	@Input() templateRef!: TemplateRef<any>;
+	@Input() templateRef!: TemplateRef<unknown>;
 }

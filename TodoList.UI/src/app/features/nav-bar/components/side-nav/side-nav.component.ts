@@ -29,8 +29,8 @@ export class SideNavComponent {
 	}
 
 	public isSelected(page: Pages, todoListId?: number): boolean {
-		let pageSelected = page === this.pageSelector.currentPage;
-		let todoListIdSelected = !!todoListId
+		const pageSelected = page === this.pageSelector.currentPage;
+		const todoListIdSelected = todoListId
 			? todoListId === this.pageSelector.todoListId
 			: true;
 		return pageSelected && todoListIdSelected;

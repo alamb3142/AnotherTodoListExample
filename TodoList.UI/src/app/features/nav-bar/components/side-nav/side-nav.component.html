@@ -4,36 +4,55 @@
 	</div>
 	<div class="nav-option-container">
 		<!-- TODO: better isSelected logic, this doesn't extend well when we start navigating to /lists/123 -->
-		<div class="nav-option" [ngClass]="isSelected(pages.home) ? 'selected' : ''" (click)="home()">
+		<a
+			class="nav-option"
+			[ngClass]="isSelected(pages.home) ? 'selected' : ''"
+			(click)="home()"
+			(keydown)="home()"
+			tabindex="0"
+		>
 			<fa-icon [icon]="icons.home" [fixedWidth]="true"></fa-icon>
 			<p>Home</p>
-		</div>
-		<div class="nav-option" [ngClass]="isSelected(pages.lists) ? 'selected' : ''" (click)="lists()">
+		</a>
+		<a
+			class="nav-option"
+			[ngClass]="isSelected(pages.lists) ? 'selected' : ''"
+			(click)="lists()"
+			(keydown)="lists()"
+			tabindex="0"
+		>
 			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
 			<p>Lists</p>
-		</div>
+		</a>
 		<!-- <div class="nav-option" [ngClass]="isSelected('calendar') ? 'selected' : ''"> -->
 		<!-- 	<fa-icon [icon]="icons.calendar" [fixedWidth]="true"></fa-icon> -->
 		<!-- 	<p>Calendar</p> -->
 		<!-- </div> -->
 	</div>
-	<div class="not-a-horizontal-rule"><div>
-	<div class="nav-option-container">
-		<div 
-			class="nav-option" 
-			*ngFor="let todoList of todoLists$ | async" 
-			(click)="list(todoList.id)"
-			[ngClass]="isSelected(pages.list, todoList.id) ? 'selected' : ''"
-		>
-			<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
-			<div class="space-between-box">
-				<p>{{ todoList.title }}</p>
-				<p>{{ todoList.todoCount }}</p>
+	<div class="not-a-horizontal-rule">
+		<div>
+			<div class="nav-option-container">
+				<a
+					class="nav-option"
+					*ngFor="let todoList of todoLists$ | async"
+					(click)="list(todoList.id)"
+					(keydown)="list(todoList.id)"
+					[ngClass]="
+						isSelected(pages.list, todoList.id) ? 'selected' : ''
+					"
+					tabindex="0"
+				>
+					<fa-icon [icon]="icons.list" [fixedWidth]="true"></fa-icon>
+					<div class="space-between-box">
+						<p>{{ todoList.title }}</p>
+						<p>{{ todoList.todoCount }}</p>
+					</div>
+				</a>
+				<div class="nav-option">
+					<fa-icon [icon]="icons.plus" [fixedWidth]="true"></fa-icon>
+					<p>New</p>
+				</div>
 			</div>
-		</div>
-		<div class="nav-option">
-			<fa-icon [icon]="icons.plus" [fixedWidth]="true"></fa-icon>
-			<p>New</p>
 		</div>
 	</div>
 </div>
