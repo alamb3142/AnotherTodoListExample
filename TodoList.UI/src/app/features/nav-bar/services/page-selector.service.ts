@@ -26,7 +26,6 @@ export class PageSelectorService {
 
 		if (id) route += `/${id}`;
 
-		this.router.navigate([Pages.home]);
 		this.router.navigate([route]);
 	}
 
