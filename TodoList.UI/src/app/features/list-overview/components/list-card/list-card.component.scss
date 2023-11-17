@@ -7,4 +7,8 @@
 	padding: 0em 1em 0em 1em;
 	min-height: 4rem;
 	border-radius: 0.5rem;
+	&:hover {
+		background-color: var(--color-secondary);
+		cursor: pointer;
+	}
 }
