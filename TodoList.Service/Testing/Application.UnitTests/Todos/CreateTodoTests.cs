@@ -1,6 +1,7 @@
 using Application.Todos.CreateTodo;
 using Domain.Common.Errors;
 using Domain.Common.ValueObjects;
+using Domain.TodoLists;
 using Domain.Todos;
 
 namespace Application.UnitTests.Todos.CreateTodo;
@@ -8,7 +9,8 @@ namespace Application.UnitTests.Todos.CreateTodo;
 [TestFixture]
 public class CreateTodoTests
 {
-    private ITodoRepository _repository;
+    private ITodoRepository _todoRepository;
+    private ITodoListRepository _todoListRepository;
     private CreateTodoCommandHandler _handler;
     private Todo _todo;
     private CreateTodoCommand _validCommand = new() { Title = "A New Todo" };
@@ -16,8 +18,9 @@ public class CreateTodoTests
     [SetUp]
     public void Setup()
     {
-        _repository = Substitute.For<ITodoRepository>();
-        _handler = new(_repository);
+        _todoRepository = Substitute.For<ITodoRepository>();
+        _todoListRepository = Substitute.For<ITodoListRepository>();
+        _handler = new(_todoRepository, _todoListRepository);
         _todo = Todo.Create(Title.Create("A New Todo").Value);
     }
 
@@ -27,7 +30,7 @@ public class CreateTodoTests
         var result = await _handler.Handle(_validCommand, CancellationToken.None);
 
         result.IsSuccess.Should().BeTrue();
-        _repository.Received().Create(Arg.Any<Todo>());
+        _todoRepository.Received().Create(Arg.Any<Todo>());
     }
 
     [TestCase("")]

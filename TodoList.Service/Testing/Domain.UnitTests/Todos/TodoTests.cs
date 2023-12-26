@@ -34,6 +34,6 @@ public class TodoTests
 		var newTitle = "Walk the dog";
 		todo.Rename(newTitle);
 
-		todo.Title.Should().Be(newTitle);
+		todo.Title.Value.Should().Be(newTitle);
 	}
 }
