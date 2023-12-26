@@ -1,5 +1,5 @@
 using Domain.Users;
-using FluentAssertions;
+;
 
 namespace Testing.Domain.Users;
 

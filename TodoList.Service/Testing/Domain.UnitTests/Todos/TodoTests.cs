@@ -1,6 +1,5 @@
 using Domain.Common.ValueObjects;
 using Domain.Todos;
-using FluentAssertions;
 
 namespace Testing.Domain.Todos;
 
