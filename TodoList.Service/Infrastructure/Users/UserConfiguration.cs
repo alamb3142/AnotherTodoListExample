@@ -12,14 +12,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
 		builder.HasKey(t => t.Id);
 		builder.Property(t => t.Id).IsRequired();
-
-		builder.OwnsOne<Email>(
-			user => user.Email,
-			email =>
-			{
-				email.Property(e => e.Value).HasColumnName("EmailValue").IsRequired();
-				email.Property(e => e.Verified).HasColumnName("EmailVerified").IsRequired();
-			}
-		);
+		builder.Property(t => t.HashedPassword).IsRequired();
+		builder.Property(t => t.Salt).IsRequired();
 	}
 }
