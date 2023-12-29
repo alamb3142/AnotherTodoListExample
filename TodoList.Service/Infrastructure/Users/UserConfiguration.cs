@@ -12,6 +12,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
 		builder.HasKey(t => t.Id);
 		builder.Property(t => t.Id).IsRequired();
+		builder.Property(u => u.Username).IsRequired();
 		builder.Property(t => t.HashedPassword).IsRequired();
 		builder.Property(t => t.Salt).IsRequired();
 	}
