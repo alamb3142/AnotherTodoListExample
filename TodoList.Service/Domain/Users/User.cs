@@ -1,4 +1,7 @@
 using Domain.Common;
+using Domain.Common.Errors;
+using Domain.Users.Errors;
+using FluentResults;
 
 namespace Domain.Users;
 
@@ -15,9 +18,14 @@ public class User : Entity, IAggregateRoot
 		Salt = salt;
 	}
 
-	public static User Create(string username, string hashedPassword, string salt)
+	public static Result<User> Create(string username, string hashedPassword, string salt)
 	{
-		return new User(username, hashedPassword, salt);
+		var validUsernameCheck = InvalidUsernameError.Check(username);
+		if (validUsernameCheck.IsFailed)
+			return validUsernameCheck.ToResult<User>();
+
+		var user = new User(username, hashedPassword, salt);
+		return Result.Ok(user);
 	}
 
 	public void UpdatePassword(string newHashedPassword)
