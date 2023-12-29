@@ -30,7 +30,10 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, R
 			return Result.Fail(new UsernameTakenError());
 
 		var newUser = User.Create(command.Username, hashedPassword, salt);
-		_repository.Create(newUser);
+		if (newUser.IsFailed)
+			return newUser.ToResult();
+
+		_repository.Create(newUser.Value);
 
 		return Result.Ok();
 	}
