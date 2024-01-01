@@ -1,7 +1,6 @@
 using Domain.Common.ValueObjects;
 using Domain.TodoLists;
 using Domain.TodoLists.Events;
-;
 
 namespace Testing.Domain.TodoLists;
 
