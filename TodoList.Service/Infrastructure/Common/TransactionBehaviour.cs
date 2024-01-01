@@ -14,8 +14,8 @@ namespace Infrastructure.Common
 
         public async ValueTask<TResponse> Handle(
             TRequest message,
-            CancellationToken cancellationToken,
-            MessageHandlerDelegate<TRequest, TResponse> next
+            MessageHandlerDelegate<TRequest, TResponse> next,
+            CancellationToken cancellationToken
         )
         {
             var response = await next(message, cancellationToken);
