@@ -47,7 +47,9 @@ public class LoginCommandHandler : ICommandHandler<LoginCommand, Result<string>>
 
 	private string GenerateToken(int userId)
 	{
-		var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AStupidSecret"));
+		var securityKey = new SymmetricSecurityKey(
+			Encoding.UTF8.GetBytes("AStupidStupidStupidStuipdStuidasldkfjsalkfjsadfSecret")
+		);
 		var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
 		var claims = new[] { new Claim("user_id", userId.ToString()) };
