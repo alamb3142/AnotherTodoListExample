@@ -6,7 +6,7 @@ Todo List example written using tactical DDD patterns, using Grpc-Web to enable 
 
 - [Domain Model](./Documentation/domain-model.md)
 - [Building](./Documentation/building.md)
-- [TodoList.Service Readme](./TodoList.Service/TodoList.Service.md)
+- [TodoList.Service Readme](./TodoList.Service/readme.md)
 - [TodoList.UI Readme](./TodoList.UI/README.md)
 
 ## About
